@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.irurueta.android.recyclertablayout", appContext.packageName)
+        assertEquals("com.irurueta.android.recyclertablayout.app", appContext.packageName)
     }
 }
