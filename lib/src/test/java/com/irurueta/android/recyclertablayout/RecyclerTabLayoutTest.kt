@@ -3,7 +3,9 @@ package com.irurueta.android.recyclertablayout
 import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.TypedArray
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
@@ -1058,9 +1060,248 @@ class RecyclerTabLayoutTest {
         verify(exactly = 1) { animator.cancel() }
     }
 
-    // TODO: onDraw
+    @Test
+    fun onDraw_whenNoViewFoundByLayoutManager_makesNoAction() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val view = RecyclerTabLayout(context)
 
-    // TODO: onDetachedFromWindow
+        val tabMinWidth: Int? = view.getPrivateProperty("tabMinWidth")
+        requireNotNull(tabMinWidth)
+        assertEquals(72, tabMinWidth)
+
+        // set spy as layout manager
+        val layoutManager = view.layoutManager
+        requireNotNull(layoutManager)
+        val layoutManagerSpy: RecyclerView.LayoutManager = spyk(layoutManager)
+        view.setPrivateProperty("linearLayoutManager", layoutManagerSpy)
+
+        // call onDraw
+        val canvas = mockk<Canvas>()
+        view.onDraw(canvas)
+
+        verify(exactly = 1) { layoutManagerSpy.findViewByPosition(0) }
+        verify { canvas wasNot Called }
+    }
+
+    @Test
+    fun onDraw_whenViewFoundByLayoutManagerAndNotVisibleAtLeft_makesNoAction() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val view = RecyclerTabLayout(context)
+
+        val tabMinWidth: Int? = view.getPrivateProperty("tabMinWidth")
+        requireNotNull(tabMinWidth)
+        assertEquals(72, tabMinWidth)
+
+        // set spy as layout manager
+        val layoutManager = view.layoutManager
+        requireNotNull(layoutManager)
+        val layoutManagerSpy: RecyclerView.LayoutManager = spyk(layoutManager)
+        view.setPrivateProperty("linearLayoutManager", layoutManagerSpy)
+
+        // setup view returned by layout manager spy
+        val positionView = mockk<View>()
+        every { positionView.right }.returns(-1)
+        every { layoutManagerSpy.findViewByPosition(0) }.returns(positionView)
+
+        // call onDraw
+        val canvas = mockk<Canvas>()
+        view.onDraw(canvas)
+
+        verify(exactly = 1) { layoutManagerSpy.findViewByPosition(0) }
+        verify { canvas wasNot Called }
+    }
+
+    @Test
+    fun onDraw_whenViewFoundByLayoutManagerAndNotVisibleAtRight_makesNoAction() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val view = RecyclerTabLayout(context)
+
+        val tabMinWidth: Int? = view.getPrivateProperty("tabMinWidth")
+        requireNotNull(tabMinWidth)
+        assertEquals(72, tabMinWidth)
+
+        // set spy as layout manager
+        val layoutManager = view.layoutManager
+        requireNotNull(layoutManager)
+        val layoutManagerSpy: RecyclerView.LayoutManager = spyk(layoutManager)
+        view.setPrivateProperty("linearLayoutManager", layoutManagerSpy)
+
+        // setup view returned by layout manager spy
+        val positionView = mockk<View>()
+        every { positionView.right }.returns(0)
+        every { positionView.left }.returns(1081)
+        every { layoutManagerSpy.findViewByPosition(0) }.returns(positionView)
+
+        // set view size
+        view.measure(
+            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY)
+        )
+
+        assertEquals(1080, view.measuredWidth)
+        assertTrue(positionView.left > view.measuredWidth)
+
+        // call onDraw
+        val canvas = mockk<Canvas>()
+        view.onDraw(canvas)
+
+        verify(exactly = 1) { layoutManagerSpy.findViewByPosition(0) }
+        verify { canvas wasNot Called }
+    }
+
+    @Test
+    fun onDraw_whenViewFoundByLayoutManagerVisibleAndNotSelected_drawsIndicator() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val view = RecyclerTabLayout(context)
+
+        val tabMinWidth: Int? = view.getPrivateProperty("tabMinWidth")
+        requireNotNull(tabMinWidth)
+        assertEquals(72, tabMinWidth)
+
+        // set spy as layout manager
+        val layoutManager = view.layoutManager
+        requireNotNull(layoutManager)
+        val layoutManagerSpy: RecyclerView.LayoutManager = spyk(layoutManager)
+        view.setPrivateProperty("linearLayoutManager", layoutManagerSpy)
+
+        // setup view returned by layout manager spy
+        val positionView = mockk<View>()
+        every { positionView.right }.returns(0)
+        every { positionView.left }.returns(1080)
+        every { layoutManagerSpy.findViewByPosition(0) }.returns(positionView)
+
+        // set view size
+        view.measure(
+            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY)
+        )
+
+        assertEquals(1080, view.measuredWidth)
+        assertEquals(positionView.left, view.measuredWidth)
+
+        val hasSelectedView: Boolean? = view.getPrivateProperty("hasSelectedView")
+        requireNotNull(hasSelectedView)
+        assertFalse(hasSelectedView)
+
+        // call onDraw
+        val canvas = mockk<Canvas>()
+        justRun {
+            canvas.drawRect(any(), any(), any(), any(), any())
+        }
+        view.onDraw(canvas)
+
+        verify(exactly = 1) { layoutManagerSpy.findViewByPosition(0) }
+
+        val endIndicatorLeft: Float? = view.getPrivateProperty("endIndicatorLeft")
+        requireNotNull(endIndicatorLeft)
+        assertEquals(positionView.left.toFloat(), endIndicatorLeft, 0.0f)
+
+        val startIndicatorLeft: Float? = view.getPrivateProperty("startIndicatorLeft")
+        requireNotNull(startIndicatorLeft)
+        assertEquals(endIndicatorLeft, startIndicatorLeft, 0.0f)
+
+        val endIndicatorRight: Float? = view.getPrivateProperty("endIndicatorRight")
+        requireNotNull(endIndicatorRight)
+        assertEquals(positionView.right.toFloat(), endIndicatorRight)
+
+        val startIndicatorRight: Float? = view.getPrivateProperty("startIndicatorRight")
+        requireNotNull(startIndicatorRight)
+        assertEquals(endIndicatorRight, startIndicatorRight, 0.0f)
+
+        val left = startIndicatorLeft + view.indicatorMarginLeft
+        val right = startIndicatorRight - view.indicatorMarginRight
+        val top = (view.height - view.indicatorHeight).toFloat()
+        val bottom = view.height.toFloat()
+
+        val indicatorPaint: Paint? = view.getPrivateProperty("indicatorPaint")
+        requireNotNull(indicatorPaint)
+        verify(exactly = 1) { canvas.drawRect(left, top, right, bottom, indicatorPaint) }
+    }
+
+    @Test
+    fun onDraw_whenViewFoundByLayoutManagerVisibleAndSelected_drawsIndicator() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val view = RecyclerTabLayout(context)
+
+        val tabMinWidth: Int? = view.getPrivateProperty("tabMinWidth")
+        requireNotNull(tabMinWidth)
+        assertEquals(72, tabMinWidth)
+
+        // set spy as layout manager
+        val layoutManager = view.layoutManager
+        requireNotNull(layoutManager)
+        val layoutManagerSpy: RecyclerView.LayoutManager = spyk(layoutManager)
+        view.setPrivateProperty("linearLayoutManager", layoutManagerSpy)
+
+        // setup view returned by layout manager spy
+        val positionView = mockk<View>()
+        every { positionView.right }.returns(0)
+        every { positionView.left }.returns(1080)
+        every { positionView.measuredWidth }.returns(111)
+        every { positionView.translationX }.returns(0.0f)
+        every { layoutManagerSpy.findViewByPosition(0) }.returns(positionView)
+
+        // set view size
+        view.measure(
+            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY)
+        )
+
+        assertEquals(1080, view.measuredWidth)
+        assertEquals(positionView.left, view.measuredWidth)
+
+        val hasSelectedView1: Boolean? = view.getPrivateProperty("hasSelectedView")
+        requireNotNull(hasSelectedView1)
+        assertFalse(hasSelectedView1)
+
+        // set current item
+        view.setCurrentItem(0, false)
+
+        // check
+        val hasSelectedView2: Boolean? = view.getPrivateProperty("hasSelectedView")
+        requireNotNull(hasSelectedView2)
+        assertTrue(hasSelectedView2)
+
+        // call onDraw
+        val canvas = mockk<Canvas>()
+        justRun {
+            canvas.drawRect(any(), any(), any(), any(), any())
+        }
+        view.onDraw(canvas)
+
+        verify(exactly = 2) { layoutManagerSpy.findViewByPosition(0) }
+
+        val indicatorScroll: Int? = view.getPrivateProperty("indicatorScroll")
+        requireNotNull(indicatorScroll)
+        val currentIndicatorLeft: Float? = view.getPrivateProperty("currentIndicatorLeft")
+        requireNotNull(currentIndicatorLeft)
+        val left = currentIndicatorLeft - indicatorScroll + view.indicatorMarginLeft
+
+        val currentIndicatorRight: Float? = view.getPrivateProperty("currentIndicatorRight")
+        requireNotNull(currentIndicatorRight)
+        val right = currentIndicatorRight - indicatorScroll - view.indicatorMarginRight
+
+        val top = (view.height - view.indicatorHeight).toFloat()
+        val bottom = view.height.toFloat()
+
+        val indicatorPaint: Paint? = view.getPrivateProperty("indicatorPaint")
+        requireNotNull(indicatorPaint)
+        verify(exactly = 1) { canvas.drawRect(left, top, right, bottom, indicatorPaint) }
+    }
+
+    @Test
+    fun onDetachedFromWindow_removesScrollListener() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val view = RecyclerTabLayout(context)
+
+        assertNotNull(view.getPrivateProperty("recyclerOnScrollListener"))
+
+        // detach from window
+        view.callPrivateFunc("onDetachedFromWindow")
+
+        // check
+        assertNull(view.getPrivateProperty("recyclerOnScrollListener"))
+    }
 
     // TODO: RecyclerOnScrollListener (this.recyclerOnScrollListener)
 }
