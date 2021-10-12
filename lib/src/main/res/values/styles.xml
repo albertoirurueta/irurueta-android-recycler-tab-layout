@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="RecyclerTabLayout">
+        <item name="tabMinWidth">72dp</item>
+        <item name="tabIndicatorColor">@color/design_default_color_primary</item>
+        <item name="tabIndicatorHeight">2dp</item>
+    </style>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RecyclerTabLayout">
+        <attr name="tabIndicatorColor" format="color"/>
+        <attr name="tabIndicatorHeight" format="dimension"/>
+        <attr name="tabIndicatorMarginStart" format="dimension"/>
+        <attr name="tabIndicatorMarginEnd" format="dimension"/>
+        <attr name="tabOnScreenLimitEnabled" format="boolean"/>
+        <attr name="tabMinWidth" format="dimension"/>
+        <attr name="scrollEnabled" format="boolean"/>
+    </declare-styleable>
+</resources>
