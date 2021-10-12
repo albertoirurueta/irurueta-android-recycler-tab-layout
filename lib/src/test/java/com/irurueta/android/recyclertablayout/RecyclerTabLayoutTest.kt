@@ -1,8 +1,10 @@
 package com.irurueta.android.recyclertablayout
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Color
+import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.view.ViewCompat
@@ -14,6 +16,8 @@ import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.Shadows
+import org.robolectric.annotation.LooperMode
 
 @RunWith(RobolectricTestRunner::class)
 class RecyclerTabLayoutTest {
@@ -535,8 +539,528 @@ class RecyclerTabLayoutTest {
         val oldPositionOffset: Float? = view.getPrivateProperty("oldPositionOffset")
         requireNotNull(oldPositionOffset)
         assertEquals(0.0f, oldPositionOffset, 0.0f)
+
+        verify(exactly = 1) {
+            (layoutManagerSpy as LinearLayoutManager).scrollToPositionWithOffset(1, oldScrollOffset)
+        }
     }
 
-    // TODO: when layout manager has no next view
+    @Test
+    fun setCurrentItem_whenNotSmoothScrollNoNextViewInLayoutManager_scrollsToExpectedPosition() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val view = RecyclerTabLayout(context)
 
+        val tabMinWidth: Int? = view.getPrivateProperty("tabMinWidth")
+        requireNotNull(tabMinWidth)
+        assertEquals(72, tabMinWidth)
+
+        // set spy as layout manager
+        val layoutManager = view.layoutManager
+        requireNotNull(layoutManager)
+        val layoutManagerSpy: RecyclerView.LayoutManager = spyk(layoutManager)
+        view.setPrivateProperty("linearLayoutManager", layoutManagerSpy)
+
+        // setup view returned by layout manager spy
+        val selectedView = mockk<View>()
+        every { selectedView.measuredWidth }.returns(101)
+        every { selectedView.translationX }.returns(10.0f)
+        every { selectedView.left }.returns(11)
+        every { selectedView.right }.returns(112)
+        every { layoutManagerSpy.findViewByPosition(1) }.returns(selectedView)
+
+        // set view size
+        assertEquals(0, view.measuredWidth)
+        view.measure(
+            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY)
+        )
+
+        assertEquals(1080, view.measuredWidth)
+
+        // check default value
+        val indicatorPosition1: Int? = view.getPrivateProperty("indicatorPosition")
+        requireNotNull(indicatorPosition1)
+        assertEquals(0, indicatorPosition1)
+        assertNotNull(view.getPrivateProperty("linearLayoutManager"))
+
+        // set new current item
+        view.setCurrentItem(1, false)
+
+        // check
+        val hasSelectedView: Boolean? = view.getPrivateProperty("hasSelectedView")
+        requireNotNull(hasSelectedView)
+        assertTrue(hasSelectedView)
+
+        val endIndicatorLeft: Float? = view.getPrivateProperty("endIndicatorLeft")
+        requireNotNull(endIndicatorLeft)
+        assertEquals(selectedView.left + selectedView.translationX, endIndicatorLeft)
+
+        val endIndicatorRight: Float? = view.getPrivateProperty("endIndicatorRight")
+        requireNotNull(endIndicatorRight)
+        assertEquals(selectedView.right + selectedView.translationX, endIndicatorRight)
+
+        val currentIndicatorLeft: Float? = view.getPrivateProperty("currentIndicatorLeft")
+        requireNotNull(currentIndicatorLeft)
+        assertEquals(endIndicatorLeft, currentIndicatorLeft)
+
+        val currentIndicatorRight: Float? = view.getPrivateProperty("currentIndicatorRight")
+        requireNotNull(currentIndicatorRight)
+        assertEquals(endIndicatorRight, currentIndicatorRight)
+
+        val startIndicatorLeft: Float? = view.getPrivateProperty("startIndicatorLeft")
+        requireNotNull(startIndicatorLeft)
+        assertEquals(endIndicatorLeft, startIndicatorLeft, 0.0f)
+        val startIndicatorRight: Float? = view.getPrivateProperty("startIndicatorRight")
+        requireNotNull(startIndicatorRight)
+        assertEquals(endIndicatorRight, startIndicatorRight, 0.0f)
+
+        val indicatorPosition2: Int? = view.getPrivateProperty("indicatorPosition")
+        requireNotNull(indicatorPosition2)
+        assertEquals(1, indicatorPosition2)
+
+        val indicatorScroll: Int? = view.getPrivateProperty("indicatorScroll")
+        requireNotNull(indicatorScroll)
+        assertEquals(0, indicatorScroll)
+
+        val oldPosition: Int? = view.getPrivateProperty("oldPosition")
+        requireNotNull(oldPosition)
+        assertEquals(1, oldPosition)
+
+        val oldScrollOffset: Int? = view.getPrivateProperty("oldScrollOffset")
+        requireNotNull(oldScrollOffset)
+        val sLeft = view.measuredWidth / 2.0f - selectedView.measuredWidth
+        assertEquals(sLeft, oldScrollOffset.toFloat(), 0.0f)
+
+        val oldPositionOffset: Float? = view.getPrivateProperty("oldPositionOffset")
+        requireNotNull(oldPositionOffset)
+        assertEquals(0.0f, oldPositionOffset, 0.0f)
+
+        verify(exactly = 1) {
+            (layoutManagerSpy as LinearLayoutManager).scrollToPositionWithOffset(1, oldScrollOffset)
+        }
+    }
+
+    @Test
+    fun setCurrentItem_whenNotSmoothScrollAndPositionZero_scrollsToExpectedPosition() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val view = RecyclerTabLayout(context)
+
+        val tabMinWidth: Int? = view.getPrivateProperty("tabMinWidth")
+        requireNotNull(tabMinWidth)
+        assertEquals(72, tabMinWidth)
+
+        // set spy as layout manager
+        val layoutManager = view.layoutManager
+        requireNotNull(layoutManager)
+        val layoutManagerSpy: RecyclerView.LayoutManager = spyk(layoutManager)
+        view.setPrivateProperty("linearLayoutManager", layoutManagerSpy)
+
+        // setup view returned by layout manager spy
+        val selectedView = mockk<View>()
+        every { selectedView.measuredWidth }.returns(101)
+        every { selectedView.translationX }.returns(10.0f)
+        every { selectedView.left }.returns(11)
+        every { selectedView.right }.returns(112)
+        every { layoutManagerSpy.findViewByPosition(0) }.returns(selectedView)
+
+        // set view size
+        assertEquals(0, view.measuredWidth)
+        view.measure(
+            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY)
+        )
+
+        assertEquals(1080, view.measuredWidth)
+
+        // check default value
+        val indicatorPosition1: Int? = view.getPrivateProperty("indicatorPosition")
+        requireNotNull(indicatorPosition1)
+        assertEquals(0, indicatorPosition1)
+        assertNotNull(view.getPrivateProperty("linearLayoutManager"))
+
+        // set new current item
+        view.setCurrentItem(0, false)
+
+        // check
+        val hasSelectedView: Boolean? = view.getPrivateProperty("hasSelectedView")
+        requireNotNull(hasSelectedView)
+        assertTrue(hasSelectedView)
+
+        val endIndicatorLeft: Float? = view.getPrivateProperty("endIndicatorLeft")
+        requireNotNull(endIndicatorLeft)
+        assertEquals(selectedView.left + selectedView.translationX, endIndicatorLeft)
+
+        val endIndicatorRight: Float? = view.getPrivateProperty("endIndicatorRight")
+        requireNotNull(endIndicatorRight)
+        assertEquals(selectedView.right + selectedView.translationX, endIndicatorRight)
+
+        val currentIndicatorLeft: Float? = view.getPrivateProperty("currentIndicatorLeft")
+        requireNotNull(currentIndicatorLeft)
+        assertEquals(endIndicatorLeft, currentIndicatorLeft)
+
+        val currentIndicatorRight: Float? = view.getPrivateProperty("currentIndicatorRight")
+        requireNotNull(currentIndicatorRight)
+        assertEquals(endIndicatorRight, currentIndicatorRight)
+
+        val startIndicatorLeft: Float? = view.getPrivateProperty("startIndicatorLeft")
+        requireNotNull(startIndicatorLeft)
+        assertEquals(endIndicatorLeft, startIndicatorLeft, 0.0f)
+        val startIndicatorRight: Float? = view.getPrivateProperty("startIndicatorRight")
+        requireNotNull(startIndicatorRight)
+        assertEquals(endIndicatorRight, startIndicatorRight, 0.0f)
+
+        val indicatorPosition2: Int? = view.getPrivateProperty("indicatorPosition")
+        requireNotNull(indicatorPosition2)
+        assertEquals(0, indicatorPosition2)
+
+        val indicatorScroll: Int? = view.getPrivateProperty("indicatorScroll")
+        requireNotNull(indicatorScroll)
+        assertEquals(0, indicatorScroll)
+
+        val oldPosition: Int? = view.getPrivateProperty("oldPosition")
+        requireNotNull(oldPosition)
+        assertEquals(0, oldPosition)
+
+        val oldScrollOffset: Int? = view.getPrivateProperty("oldScrollOffset")
+        requireNotNull(oldScrollOffset)
+        assertEquals(0, oldScrollOffset)
+
+        val oldPositionOffset: Float? = view.getPrivateProperty("oldPositionOffset")
+        requireNotNull(oldPositionOffset)
+        assertEquals(0.0f, oldPositionOffset, 0.0f)
+
+        verify(exactly = 0) {
+            (layoutManagerSpy as LinearLayoutManager).scrollToPositionWithOffset(any(), any())
+        }
+    }
+
+    @LooperMode(LooperMode.Mode.PAUSED)
+    @Test
+    fun setCurrentItem_whenSmoothScroll_scrollsToExpectedPosition() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val view = RecyclerTabLayout(context)
+
+        val tabMinWidth: Int? = view.getPrivateProperty("tabMinWidth")
+        requireNotNull(tabMinWidth)
+        assertEquals(72, tabMinWidth)
+
+        // set spy as layout manager
+        val layoutManager = view.layoutManager
+        requireNotNull(layoutManager)
+        val layoutManagerSpy: RecyclerView.LayoutManager = spyk(layoutManager)
+        view.setPrivateProperty("linearLayoutManager", layoutManagerSpy)
+
+        // setup view returned by layout manager spy
+        val selectedView = mockk<View>()
+        every { selectedView.measuredWidth }.returns(101)
+        every { selectedView.translationX }.returns(10.0f)
+        every { selectedView.left }.returns(11)
+        every { selectedView.right }.returns(112)
+        every { selectedView.x }.returns(selectedView.left + selectedView.translationX)
+        every { layoutManagerSpy.findViewByPosition(1) }.returns(selectedView)
+
+        val nextView = mockk<View>()
+        every { nextView.measuredWidth }.returns(102)
+        every { layoutManagerSpy.findViewByPosition(2) }.returns(nextView)
+
+        // set view size
+        assertEquals(0, view.measuredWidth)
+        view.measure(
+            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY)
+        )
+
+        assertEquals(1080, view.measuredWidth)
+
+        // check default value
+        val indicatorPosition1: Int? = view.getPrivateProperty("indicatorPosition")
+        requireNotNull(indicatorPosition1)
+        assertEquals(0, indicatorPosition1)
+        assertNotNull(view.getPrivateProperty("linearLayoutManager"))
+
+        // set new current item
+        view.setCurrentItem(1, true)
+
+        //finish animation
+        Shadows.shadowOf(Looper.getMainLooper()).idle()
+
+        // check
+        val hasSelectedView: Boolean? = view.getPrivateProperty("hasSelectedView")
+        requireNotNull(hasSelectedView)
+        assertTrue(hasSelectedView)
+
+        val endIndicatorLeft: Float? = view.getPrivateProperty("endIndicatorLeft")
+        requireNotNull(endIndicatorLeft)
+        assertEquals(selectedView.left + selectedView.translationX, endIndicatorLeft)
+
+        val endIndicatorRight: Float? = view.getPrivateProperty("endIndicatorRight")
+        requireNotNull(endIndicatorRight)
+        assertEquals(selectedView.right + selectedView.translationX, endIndicatorRight)
+
+        val currentIndicatorLeft: Float? = view.getPrivateProperty("currentIndicatorLeft")
+        requireNotNull(currentIndicatorLeft)
+        assertEquals(endIndicatorLeft, currentIndicatorLeft)
+
+        val currentIndicatorRight: Float? = view.getPrivateProperty("currentIndicatorRight")
+        requireNotNull(currentIndicatorRight)
+        assertEquals(endIndicatorRight, currentIndicatorRight)
+
+        val startIndicatorLeft: Float? = view.getPrivateProperty("startIndicatorLeft")
+        requireNotNull(startIndicatorLeft)
+        assertEquals(endIndicatorLeft, startIndicatorLeft, 0.0f)
+        val startIndicatorRight: Float? = view.getPrivateProperty("startIndicatorRight")
+        requireNotNull(startIndicatorRight)
+        assertEquals(endIndicatorRight, startIndicatorRight, 0.0f)
+
+        val indicatorPosition2: Int? = view.getPrivateProperty("indicatorPosition")
+        requireNotNull(indicatorPosition2)
+        assertEquals(1, indicatorPosition2)
+
+        val indicatorScroll: Int? = view.getPrivateProperty("indicatorScroll")
+        requireNotNull(indicatorScroll)
+        assertEquals(0, indicatorScroll)
+
+        val oldPosition: Int? = view.getPrivateProperty("oldPosition")
+        requireNotNull(oldPosition)
+        assertEquals(1, oldPosition)
+
+        val oldScrollOffset: Int? = view.getPrivateProperty("oldScrollOffset")
+        requireNotNull(oldScrollOffset)
+        val sLeft = view.measuredWidth / 2.0f - selectedView.measuredWidth
+        assertEquals(sLeft, oldScrollOffset.toFloat(), 0.0f)
+
+        val oldPositionOffset: Float? = view.getPrivateProperty("oldPositionOffset")
+        requireNotNull(oldPositionOffset)
+        assertEquals(0.0f, oldPositionOffset, 0.0f)
+
+        verify(exactly = 1) {
+            (layoutManagerSpy as LinearLayoutManager).scrollToPositionWithOffset(1, oldScrollOffset)
+        }
+    }
+
+    @LooperMode(LooperMode.Mode.PAUSED)
+    @Test
+    fun setCurrentItem_whenSmoothScrollAndAnimatorRunning_scrollsToExpectedPosition() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val view = RecyclerTabLayout(context)
+
+        val tabMinWidth: Int? = view.getPrivateProperty("tabMinWidth")
+        requireNotNull(tabMinWidth)
+        assertEquals(72, tabMinWidth)
+
+        // set spy as layout manager
+        val layoutManager = view.layoutManager
+        requireNotNull(layoutManager)
+        val layoutManagerSpy: RecyclerView.LayoutManager = spyk(layoutManager)
+        view.setPrivateProperty("linearLayoutManager", layoutManagerSpy)
+
+        val animator = mockk<ValueAnimator>()
+        every { animator.isRunning }.returns(true)
+        justRun { animator.cancel() }
+        view.setPrivateProperty("animator", animator)
+
+        // setup view returned by layout manager spy
+        val selectedView = mockk<View>()
+        every { selectedView.measuredWidth }.returns(101)
+        every { selectedView.translationX }.returns(10.0f)
+        every { selectedView.left }.returns(11)
+        every { selectedView.right }.returns(112)
+        every { selectedView.x }.returns(selectedView.left + selectedView.translationX)
+        every { layoutManagerSpy.findViewByPosition(1) }.returns(selectedView)
+
+        val nextView = mockk<View>()
+        every { nextView.measuredWidth }.returns(102)
+        every { layoutManagerSpy.findViewByPosition(2) }.returns(nextView)
+
+        // set view size
+        assertEquals(0, view.measuredWidth)
+        view.measure(
+            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY)
+        )
+
+        assertEquals(1080, view.measuredWidth)
+
+        // check default value
+        val indicatorPosition1: Int? = view.getPrivateProperty("indicatorPosition")
+        requireNotNull(indicatorPosition1)
+        assertEquals(0, indicatorPosition1)
+        assertNotNull(view.getPrivateProperty("linearLayoutManager"))
+
+        // set new current item
+        view.setCurrentItem(1, true)
+
+        //finish animation
+        Shadows.shadowOf(Looper.getMainLooper()).idle()
+
+        // check
+        val hasSelectedView: Boolean? = view.getPrivateProperty("hasSelectedView")
+        requireNotNull(hasSelectedView)
+        assertTrue(hasSelectedView)
+
+        val endIndicatorLeft: Float? = view.getPrivateProperty("endIndicatorLeft")
+        requireNotNull(endIndicatorLeft)
+        assertEquals(selectedView.left + selectedView.translationX, endIndicatorLeft)
+
+        val endIndicatorRight: Float? = view.getPrivateProperty("endIndicatorRight")
+        requireNotNull(endIndicatorRight)
+        assertEquals(selectedView.right + selectedView.translationX, endIndicatorRight)
+
+        val currentIndicatorLeft: Float? = view.getPrivateProperty("currentIndicatorLeft")
+        requireNotNull(currentIndicatorLeft)
+        assertEquals(endIndicatorLeft, currentIndicatorLeft)
+
+        val currentIndicatorRight: Float? = view.getPrivateProperty("currentIndicatorRight")
+        requireNotNull(currentIndicatorRight)
+        assertEquals(endIndicatorRight, currentIndicatorRight)
+
+        val startIndicatorLeft: Float? = view.getPrivateProperty("startIndicatorLeft")
+        requireNotNull(startIndicatorLeft)
+        assertEquals(endIndicatorLeft, startIndicatorLeft, 0.0f)
+        val startIndicatorRight: Float? = view.getPrivateProperty("startIndicatorRight")
+        requireNotNull(startIndicatorRight)
+        assertEquals(endIndicatorRight, startIndicatorRight, 0.0f)
+
+        val indicatorPosition2: Int? = view.getPrivateProperty("indicatorPosition")
+        requireNotNull(indicatorPosition2)
+        assertEquals(1, indicatorPosition2)
+
+        val indicatorScroll: Int? = view.getPrivateProperty("indicatorScroll")
+        requireNotNull(indicatorScroll)
+        assertEquals(0, indicatorScroll)
+
+        val oldPosition: Int? = view.getPrivateProperty("oldPosition")
+        requireNotNull(oldPosition)
+        assertEquals(1, oldPosition)
+
+        val oldScrollOffset: Int? = view.getPrivateProperty("oldScrollOffset")
+        requireNotNull(oldScrollOffset)
+        val sLeft = view.measuredWidth / 2.0f - selectedView.measuredWidth
+        assertEquals(sLeft, oldScrollOffset.toFloat(), 0.0f)
+
+        val oldPositionOffset: Float? = view.getPrivateProperty("oldPositionOffset")
+        requireNotNull(oldPositionOffset)
+        assertEquals(0.0f, oldPositionOffset, 0.0f)
+
+        verify(exactly = 1) {
+            (layoutManagerSpy as LinearLayoutManager).scrollToPositionWithOffset(1, oldScrollOffset)
+        }
+        verify(exactly = 1) { animator.cancel() }
+    }
+
+    @LooperMode(LooperMode.Mode.PAUSED)
+    @Test
+    fun setCurrentItem_whenSmoothScrollAndSmallerPosition_scrollsToExpectedPosition() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val view = RecyclerTabLayout(context)
+
+        val tabMinWidth: Int? = view.getPrivateProperty("tabMinWidth")
+        requireNotNull(tabMinWidth)
+        assertEquals(72, tabMinWidth)
+
+        // set spy as layout manager
+        val layoutManager = view.layoutManager
+        requireNotNull(layoutManager)
+        val layoutManagerSpy: RecyclerView.LayoutManager = spyk(layoutManager)
+        view.setPrivateProperty("linearLayoutManager", layoutManagerSpy)
+
+        val animator = mockk<ValueAnimator>()
+        every { animator.isRunning }.returns(true)
+        justRun { animator.cancel() }
+        view.setPrivateProperty("animator", animator)
+
+        // setup view returned by layout manager spy
+        val selectedView = mockk<View>()
+        every { selectedView.measuredWidth }.returns(101)
+        every { selectedView.translationX }.returns(10.0f)
+        every { selectedView.left }.returns(11)
+        every { selectedView.right }.returns(112)
+        every { selectedView.x }.returns(selectedView.left + selectedView.translationX)
+        every { layoutManagerSpy.findViewByPosition(1) }.returns(selectedView)
+        every { layoutManagerSpy.findViewByPosition(0) }.returns(selectedView)
+
+        val nextView = mockk<View>()
+        every { nextView.measuredWidth }.returns(102)
+        every { layoutManagerSpy.findViewByPosition(2) }.returns(nextView)
+
+        // set view size
+        assertEquals(0, view.measuredWidth)
+        view.measure(
+            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY)
+        )
+
+        assertEquals(1080, view.measuredWidth)
+
+        // check default value
+        val indicatorPosition1: Int? = view.getPrivateProperty("indicatorPosition")
+        requireNotNull(indicatorPosition1)
+        assertEquals(0, indicatorPosition1)
+        assertNotNull(view.getPrivateProperty("linearLayoutManager"))
+
+        // set new current item
+        view.setCurrentItem(1, false)
+
+        // set smaller new current item
+        view.setCurrentItem(0, true)
+
+        //finish animation
+        Shadows.shadowOf(Looper.getMainLooper()).idle()
+
+        // check
+        val hasSelectedView: Boolean? = view.getPrivateProperty("hasSelectedView")
+        requireNotNull(hasSelectedView)
+        assertTrue(hasSelectedView)
+
+        val endIndicatorLeft: Float? = view.getPrivateProperty("endIndicatorLeft")
+        requireNotNull(endIndicatorLeft)
+        assertEquals(selectedView.left + selectedView.translationX, endIndicatorLeft)
+
+        val endIndicatorRight: Float? = view.getPrivateProperty("endIndicatorRight")
+        requireNotNull(endIndicatorRight)
+        assertEquals(selectedView.right + selectedView.translationX, endIndicatorRight)
+
+        val currentIndicatorLeft: Float? = view.getPrivateProperty("currentIndicatorLeft")
+        requireNotNull(currentIndicatorLeft)
+        assertEquals(endIndicatorLeft, currentIndicatorLeft)
+
+        val currentIndicatorRight: Float? = view.getPrivateProperty("currentIndicatorRight")
+        requireNotNull(currentIndicatorRight)
+        assertEquals(endIndicatorRight, currentIndicatorRight)
+
+        val startIndicatorLeft: Float? = view.getPrivateProperty("startIndicatorLeft")
+        requireNotNull(startIndicatorLeft)
+        assertEquals(endIndicatorLeft, startIndicatorLeft, 0.0f)
+        val startIndicatorRight: Float? = view.getPrivateProperty("startIndicatorRight")
+        requireNotNull(startIndicatorRight)
+        assertEquals(endIndicatorRight, startIndicatorRight, 0.0f)
+
+        val indicatorPosition2: Int? = view.getPrivateProperty("indicatorPosition")
+        requireNotNull(indicatorPosition2)
+        assertEquals(0, indicatorPosition2)
+
+        val indicatorScroll: Int? = view.getPrivateProperty("indicatorScroll")
+        requireNotNull(indicatorScroll)
+        assertEquals(0, indicatorScroll)
+
+        val oldPosition: Int? = view.getPrivateProperty("oldPosition")
+        requireNotNull(oldPosition)
+        assertEquals(0, oldPosition)
+
+        val oldScrollOffset: Int? = view.getPrivateProperty("oldScrollOffset")
+        requireNotNull(oldScrollOffset)
+        assertEquals(0, oldScrollOffset)
+
+        val oldPositionOffset: Float? = view.getPrivateProperty("oldPositionOffset")
+        requireNotNull(oldPositionOffset)
+        assertEquals(0.0f, oldPositionOffset, 0.0f)
+
+        verify(exactly = 1) { animator.cancel() }
+    }
+
+    // TODO: onDraw
+
+    // TODO: onDetachedFromWindow
+
+    // TODO: RecyclerOnScrollListener (this.recyclerOnScrollListener)
 }
