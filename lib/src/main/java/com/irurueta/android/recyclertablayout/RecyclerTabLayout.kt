@@ -180,7 +180,7 @@ class RecyclerTabLayout @JvmOverloads constructor(
      * @param smoothScroll true to scroll and move item indicator with an animation,
      * false otherwise.
      */
-    fun setCurrentItem(position: Int, smoothScroll: Boolean) {
+    fun setCurrentItem(position: Int, smoothScroll: Boolean = true) {
         if (smoothScroll && position != indicatorPosition) {
             startAnimation(position)
         } else {

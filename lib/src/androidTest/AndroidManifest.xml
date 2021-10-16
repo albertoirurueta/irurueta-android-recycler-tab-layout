@@ -7,8 +7,8 @@
         android:icon="@mipmap/ic_launcher_test"
         android:label="recycler tab layout test">
 
-        <!--<activity
-            android:name="com.irurueta.android.recyclertablayout.test.GestureBitmapViewActivity"
-            android:label="GestureBitmapViewActivity" />-->
+        <activity
+            android:name="com.irurueta.android.recyclertablayout.test.RecyclerTabLayoutActivity"
+            android:label="GestureBitmapViewActivity" />
     </application>
 </manifest>
