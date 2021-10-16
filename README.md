@@ -33,6 +33,8 @@ to display image thumbnails in each tab.
 This view attempts to solve this issue by using a RecyclerView to display such items and adding a
 line indicator similar to the one used in TabLayout in order to obtain a similar behavior.
 
+![Demo](docs/video.gif)
+
 ##Usage
 Add the following dependency to your project:
 
