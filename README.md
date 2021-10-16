@@ -36,6 +36,7 @@ line indicator similar to the one used in TabLayout in order to obtain a similar
 ![Demo](docs/video.gif)
 
 ##Usage
+
 Add the following dependency to your project:
 
 ```
