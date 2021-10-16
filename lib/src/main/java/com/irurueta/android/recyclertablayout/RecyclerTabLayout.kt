@@ -506,7 +506,7 @@ class RecyclerTabLayout @JvmOverloads constructor(
             val first = linearLayoutManager?.findFirstVisibleItemPosition() ?: return
             val last = linearLayoutManager.findLastVisibleItemPosition()
             val center = recyclerTabLayout.width / 2
-            for (position in last..first step -1) {
+            for (position in last downTo first) {
                 val view = linearLayoutManager.findViewByPosition(position)
                 if (view != null && (view.left <= center)) {
                     recyclerTabLayout.setCurrentItem(position, false)

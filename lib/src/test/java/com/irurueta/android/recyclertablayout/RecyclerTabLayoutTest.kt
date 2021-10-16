@@ -20,6 +20,10 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows
 import org.robolectric.annotation.LooperMode
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.isAccessible
+import kotlin.reflect.jvm.javaField
 
 @RunWith(RobolectricTestRunner::class)
 class RecyclerTabLayoutTest {
@@ -1303,5 +1307,290 @@ class RecyclerTabLayoutTest {
         assertNull(view.getPrivateProperty("recyclerOnScrollListener"))
     }
 
-    // TODO: RecyclerOnScrollListener (this.recyclerOnScrollListener)
+    @Test
+    fun recyclerOnScrollListener_whenOnScrolled() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val view = RecyclerTabLayout(context)
+
+        val listener: RecyclerView.OnScrollListener? =
+            view.getPrivateProperty("recyclerOnScrollListener")
+        requireNotNull(listener)
+        val recyclerTabLayout: RecyclerTabLayout? =
+            getPrivatePropertyGetterValue(listener, "recyclerTabLayout")
+        requireNotNull(recyclerTabLayout)
+        assertSame(view, recyclerTabLayout)
+
+        // set spy view in listener
+        val viewSpy = spyk(view)
+        setPrivatePropertySetterValue(listener, "recyclerTabLayout", viewSpy)
+
+        // check default value
+        val dx1: Int? = getPrivatePropertyGetterValue(listener, "dx")
+        requireNotNull(dx1)
+        assertEquals(0, dx1)
+
+        val indicatorScroll1: Int? = view.getPrivateProperty("indicatorScroll")
+        requireNotNull(indicatorScroll1)
+        assertEquals(0, indicatorScroll1)
+
+        // execute
+        listener.onScrolled(view, 1, 2)
+
+        // check
+        val dx2: Int? = getPrivatePropertyGetterValue(listener, "dx")
+        requireNotNull(dx2)
+        assertEquals(1, dx2)
+        val indicatorScroll2: Int? = viewSpy.getPrivateProperty("indicatorScroll")
+        requireNotNull(indicatorScroll2)
+        assertEquals(1, indicatorScroll2)
+
+        verify(exactly = 1) { viewSpy.invalidate() }
+    }
+
+    @Test
+    fun recyclerOnScrollListener_whenAutoSelectIdleNewScrollStateZeroDxViewByPositionNotAvailableAndOnScrollStateChanged_selectsCenterForLeftScroll() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val view = RecyclerTabLayout(context)
+
+        // set view size
+        view.measure(
+            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY)
+        )
+
+        assertEquals(1080, view.measuredWidth)
+
+        // enable auto select
+        view.setAutoSelectionMode(true)
+
+        val listener: RecyclerView.OnScrollListener? =
+            view.getPrivateProperty("recyclerOnScrollListener")
+        requireNotNull(listener)
+
+        val linearLayoutManager: LinearLayoutManager? =
+            getPrivatePropertyGetterValue(listener, "linearLayoutManager")
+        requireNotNull(linearLayoutManager)
+
+        val recyclerTabLayout: RecyclerTabLayout? =
+            getPrivatePropertyGetterValue(listener, "recyclerTabLayout")
+        requireNotNull(recyclerTabLayout)
+        assertSame(view, recyclerTabLayout)
+
+        // set spy view in listener
+        val viewSpy = spyk(view)
+        setPrivatePropertySetterValue(listener, "recyclerTabLayout", viewSpy)
+
+        // set spy layout manager in listener
+        val linearLayoutManagerSpy = spyk(linearLayoutManager)
+        setPrivatePropertySetterValue(listener, "linearLayoutManager", linearLayoutManagerSpy)
+
+        val dx1: Int? = getPrivatePropertyGetterValue(listener, "dx")
+        requireNotNull(dx1)
+        assertEquals(0, dx1)
+
+        // execute
+        listener.onScrollStateChanged(view, RecyclerView.SCROLL_STATE_IDLE)
+
+        // check
+        verify(exactly = 1) { linearLayoutManagerSpy.findFirstVisibleItemPosition() }
+        verify(exactly = 1) { linearLayoutManagerSpy.findLastVisibleItemPosition() }
+        verify(exactly = 1) { linearLayoutManagerSpy.findViewByPosition(any()) }
+        verify(exactly = 0) { viewSpy.setCurrentItem(any(), any()) }
+    }
+
+    @Test
+    fun recyclerOnScrollListener_whenAutoSelectIdleNewScrollStateZeroDxViewByPositionAvailableAndOnScrollStateChanged_selectsCenterForLeftScroll() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val view = RecyclerTabLayout(context)
+
+        // set view size
+        view.measure(
+            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY)
+        )
+
+        assertEquals(1080, view.measuredWidth)
+
+        // enable auto select
+        view.setAutoSelectionMode(true)
+
+        val listener: RecyclerView.OnScrollListener? =
+            view.getPrivateProperty("recyclerOnScrollListener")
+        requireNotNull(listener)
+
+        val linearLayoutManager: LinearLayoutManager? =
+            getPrivatePropertyGetterValue(listener, "linearLayoutManager")
+        requireNotNull(linearLayoutManager)
+
+        val recyclerTabLayout: RecyclerTabLayout? =
+            getPrivatePropertyGetterValue(listener, "recyclerTabLayout")
+        requireNotNull(recyclerTabLayout)
+        assertSame(view, recyclerTabLayout)
+
+        // set spy view in listener
+        val viewSpy = spyk(view)
+        setPrivatePropertySetterValue(listener, "recyclerTabLayout", viewSpy)
+
+        // set spy layout manager in listener
+        val linearLayoutManagerSpy = spyk(linearLayoutManager)
+        val positionView = mockk<View>()
+        every { positionView.left }.returns(0)
+        every { linearLayoutManagerSpy.findViewByPosition(any()) }.returns(positionView)
+        setPrivatePropertySetterValue(listener, "linearLayoutManager", linearLayoutManagerSpy)
+
+        val dx1: Int? = getPrivatePropertyGetterValue(listener, "dx")
+        requireNotNull(dx1)
+        assertEquals(0, dx1)
+
+        // execute
+        listener.onScrollStateChanged(view, RecyclerView.SCROLL_STATE_IDLE)
+
+        // check
+        verify(exactly = 1) { linearLayoutManagerSpy.findFirstVisibleItemPosition() }
+        verify(exactly = 1) { linearLayoutManagerSpy.findLastVisibleItemPosition() }
+        verify(exactly = 1) { linearLayoutManagerSpy.findViewByPosition(any()) }
+        verify(exactly = 1) { viewSpy.setCurrentItem(any(), any()) }
+    }
+
+    @Test
+    fun recyclerOnScrollListener_whenAutoSelectIdleNewScrollStateOneDxViewByPositionNotAvailableAndOnScrollStateChanged_selectsCenterForLeftScroll() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val view = RecyclerTabLayout(context)
+
+        // set view size
+        view.measure(
+            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY)
+        )
+
+        assertEquals(1080, view.measuredWidth)
+
+        // enable auto select
+        view.setAutoSelectionMode(true)
+
+        val listener: RecyclerView.OnScrollListener? =
+            view.getPrivateProperty("recyclerOnScrollListener")
+        requireNotNull(listener)
+
+        val linearLayoutManager: LinearLayoutManager? =
+            getPrivatePropertyGetterValue(listener, "linearLayoutManager")
+        requireNotNull(linearLayoutManager)
+
+        val recyclerTabLayout: RecyclerTabLayout? =
+            getPrivatePropertyGetterValue(listener, "recyclerTabLayout")
+        requireNotNull(recyclerTabLayout)
+        assertSame(view, recyclerTabLayout)
+
+        // set spy view in listener
+        val viewSpy = spyk(view)
+        setPrivatePropertySetterValue(listener, "recyclerTabLayout", viewSpy)
+
+        // set spy layout manager in listener
+        val linearLayoutManagerSpy = spyk(linearLayoutManager)
+        setPrivatePropertySetterValue(listener, "linearLayoutManager", linearLayoutManagerSpy)
+
+        // set dx
+        listener.onScrolled(view, 1, 0)
+
+        // check
+        val dx1: Int? = getPrivatePropertyGetterValue(listener, "dx")
+        requireNotNull(dx1)
+        assertEquals(1, dx1)
+
+        // execute
+        listener.onScrollStateChanged(view, RecyclerView.SCROLL_STATE_IDLE)
+
+        // check
+        verify(exactly = 1) { linearLayoutManagerSpy.findFirstVisibleItemPosition() }
+        verify(exactly = 1) { linearLayoutManagerSpy.findLastVisibleItemPosition() }
+        verify(exactly = 1) { linearLayoutManagerSpy.findViewByPosition(any()) }
+        verify(exactly = 0) { viewSpy.setCurrentItem(any(), any()) }
+
+        val dx2: Int? = getPrivatePropertyGetterValue(listener, "dx")
+        requireNotNull(dx2)
+        assertEquals(0, dx2)
+    }
+
+    @Test
+    fun recyclerOnScrollListener_whenAutoSelectIdleNewScrollStateOneDxViewByPositionAvailableAndOnScrollStateChanged_selectsCenterForLeftScroll() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val view = RecyclerTabLayout(context)
+
+        // set view size
+        view.measure(
+            View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY)
+        )
+
+        assertEquals(1080, view.measuredWidth)
+
+        // enable auto select
+        view.setAutoSelectionMode(true)
+
+        val listener: RecyclerView.OnScrollListener? =
+            view.getPrivateProperty("recyclerOnScrollListener")
+        requireNotNull(listener)
+
+        val linearLayoutManager: LinearLayoutManager? =
+            getPrivatePropertyGetterValue(listener, "linearLayoutManager")
+        requireNotNull(linearLayoutManager)
+
+        val recyclerTabLayout: RecyclerTabLayout? =
+            getPrivatePropertyGetterValue(listener, "recyclerTabLayout")
+        requireNotNull(recyclerTabLayout)
+        assertSame(view, recyclerTabLayout)
+
+        // set spy view in listener
+        val viewSpy = spyk(view)
+        setPrivatePropertySetterValue(listener, "recyclerTabLayout", viewSpy)
+
+        // set spy layout manager in listener
+        val linearLayoutManagerSpy = spyk(linearLayoutManager)
+        val positionView = mockk<View>()
+        every { positionView.left }.returns(view.width)
+        every { positionView.width }.returns(10)
+        every { linearLayoutManagerSpy.findViewByPosition(any()) }.returns(positionView)
+        setPrivatePropertySetterValue(listener, "linearLayoutManager", linearLayoutManagerSpy)
+
+        // set dx
+        listener.onScrolled(view, 1, 0)
+
+        // check
+        val dx1: Int? = getPrivatePropertyGetterValue(listener, "dx")
+        requireNotNull(dx1)
+        assertEquals(1, dx1)
+
+        // execute
+        listener.onScrollStateChanged(view, RecyclerView.SCROLL_STATE_IDLE)
+
+        // check
+        verify(exactly = 1) { linearLayoutManagerSpy.findFirstVisibleItemPosition() }
+        verify(exactly = 1) { linearLayoutManagerSpy.findLastVisibleItemPosition() }
+        verify(exactly = 1) { linearLayoutManagerSpy.findViewByPosition(any()) }
+        verify(exactly = 1) { viewSpy.setCurrentItem(any(), any()) }
+
+        val dx2: Int? = getPrivatePropertyGetterValue(listener, "dx")
+        requireNotNull(dx2)
+        assertEquals(0, dx2)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun <T : Any, R> getPrivatePropertyGetterValue(instance: T, name: String): R? {
+        return instance::class.memberProperties
+            .firstOrNull { it.name == name }
+            ?.apply { isAccessible = true }
+            ?.getter?.call(instance) as? R
+    }
+
+    private fun <T : Any, R> setPrivatePropertySetterValue(instance: T, name: String, value: R?) {
+        val property = instance::class.memberProperties.find { it.name == name }
+        if (property is KMutableProperty<*>) {
+            property.isAccessible = true
+            property.setter.call(instance, value)
+        } else {
+            property?.isAccessible = true
+            property?.javaField?.isAccessible = true
+            property?.javaField?.set(instance, value)
+        }
+    }
 }
