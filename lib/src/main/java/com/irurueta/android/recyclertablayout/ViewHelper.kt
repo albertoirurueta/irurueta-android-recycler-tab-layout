@@ -16,25 +16,21 @@
 
 package com.irurueta.android.recyclertablayout
 
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.ext.junit.runners.AndroidJUnit4
-
-import org.junit.Test
-import org.junit.runner.RunWith
-
-import org.junit.Assert.*
+import android.view.View
+import android.view.View.LAYOUT_DIRECTION_RTL
 
 /**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * Helper class to simplify view operations.
  */
-@RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
-    @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.irurueta.android.recyclertablayout.app", appContext.packageName)
+internal object ViewHelper {
+
+    /**
+     * Determines if a view is in right-to-left mode.
+     *
+     * @param view view to check.
+     * @return true if view is in right-to-left mode, false otherwise.
+     */
+    fun isRtl(view: View): Boolean {
+        return view.layoutDirection == LAYOUT_DIRECTION_RTL
     }
 }

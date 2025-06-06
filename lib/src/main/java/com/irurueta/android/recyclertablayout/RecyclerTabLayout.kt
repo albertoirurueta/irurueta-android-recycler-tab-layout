@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.irurueta.android.recyclertablayout
 
 import android.animation.ValueAnimator
@@ -21,11 +22,11 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
-import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import kotlin.math.abs
+import androidx.core.content.withStyledAttributes
 
 /**
  * Implementation of a tab layout using a recycler view.
@@ -209,7 +210,7 @@ class RecyclerTabLayout @JvmOverloads constructor(
      *
      * @param canvas canvas to draw view into.
      */
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         val view = linearLayoutManager?.findViewByPosition(indicatorPosition) ?: return
 
         if (view.right < 0 || view.left > measuredWidth) {
@@ -237,7 +238,7 @@ class RecyclerTabLayout @JvmOverloads constructor(
         val top = (height - indicatorHeight).toFloat()
         val bottom = height.toFloat()
 
-        canvas?.drawRect(left, top, right, bottom, indicatorPaint)
+        canvas.drawRect(left, top, right, bottom, indicatorPaint)
     }
 
     /**
@@ -283,36 +284,40 @@ class RecyclerTabLayout @JvmOverloads constructor(
      * @param defStyleAttr style to be used.
      */
     private fun getAttributes(context: Context, attrs: AttributeSet?, defStyleAttr: Int) {
-        val a = context.obtainStyledAttributes(
+        if (isInEditMode) {
+            return
+        }
+
+        context.withStyledAttributes(
             attrs, R.styleable.RecyclerTabLayout, defStyleAttr, R.style.RecyclerTabLayout
-        )
-        indicatorColor =
-            a.getColor(R.styleable.RecyclerTabLayout_tabIndicatorColor, Color.TRANSPARENT)
-        indicatorHeight =
-            a.getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorHeight, 0)
+        ) {
+            indicatorColor =
+                getColor(R.styleable.RecyclerTabLayout_tabIndicatorColor, Color.TRANSPARENT)
+            indicatorHeight =
+                getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorHeight, 0)
 
-        tabOnScreenLimitEnabled =
-            a.getBoolean(R.styleable.RecyclerTabLayout_tabOnScreenLimitEnabled, true)
-        if (tabOnScreenLimitEnabled) {
-            tabMinWidth = a.getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabMinWidth, 0)
+            tabOnScreenLimitEnabled =
+                getBoolean(R.styleable.RecyclerTabLayout_tabOnScreenLimitEnabled, true)
+            if (tabOnScreenLimitEnabled) {
+                tabMinWidth = getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabMinWidth, 0)
+            }
+
+            scrollEnabled = getBoolean(R.styleable.RecyclerTabLayout_scrollEnabled, true)
+
+            val indicatorMarginStart =
+                getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorMarginStart, 0)
+            val indicatorMarginEnd =
+                getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorMarginEnd, 0)
+
+            if (isLayoutRtl()) {
+                indicatorMarginLeft = indicatorMarginEnd
+                indicatorMarginRight = indicatorMarginStart
+            } else {
+                indicatorMarginLeft = indicatorMarginStart
+                indicatorMarginRight = indicatorMarginEnd
+            }
+
         }
-
-        scrollEnabled = a.getBoolean(R.styleable.RecyclerTabLayout_scrollEnabled, true)
-
-        val indicatorMarginStart =
-            a.getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorMarginStart, 0)
-        val indicatorMarginEnd =
-            a.getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorMarginEnd, 0)
-
-        if (isLayoutRtl()) {
-            indicatorMarginLeft = indicatorMarginEnd
-            indicatorMarginRight = indicatorMarginStart
-        } else {
-            indicatorMarginLeft = indicatorMarginStart
-            indicatorMarginRight = indicatorMarginEnd
-        }
-
-        a.recycle()
     }
 
     /**
@@ -321,7 +326,7 @@ class RecyclerTabLayout @JvmOverloads constructor(
      * @return true indicates that layout direction i Right-to-left, false otherwise.
      */
     private fun isLayoutRtl(): Boolean {
-        return ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL
+        return ViewHelper.isRtl(this)
     }
 
     /**

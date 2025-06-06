@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.irurueta.android.recyclertablayout
 
 import kotlin.reflect.KMutableProperty
@@ -21,16 +22,25 @@ import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.jvm.javaField
 
-@Suppress("UNCHECKED_CAST")
-inline fun <reified T : Any, R> T.callPrivateFuncWithResult(name: String, vararg args: Any?): R? =
-    callPrivateFunc(name, *args) as? R
-
+/**
+ * Calls a private function on a class.
+ *
+ * @param name name of the function to call.
+ * @param args arguments to pass to the function.
+ * @return result of the function call.
+ */
 inline fun <reified T : Any> T.callPrivateFunc(name: String, vararg args: Any?): Any? =
     T::class.declaredMemberFunctions
         .firstOrNull { it.name == name }
         ?.apply { isAccessible = true }
         ?.call(this, *args)
 
+/**
+ * Gets a private property from a class.
+ *
+ * @param name name of the property to get.
+ * @return value of the property.
+ */
 @Suppress("UNCHECKED_CAST")
 inline fun <reified T : Any, R> T.getPrivateProperty(name: String): R? =
     T::class.memberProperties
@@ -38,6 +48,11 @@ inline fun <reified T : Any, R> T.getPrivateProperty(name: String): R? =
         ?.apply { isAccessible = true }
         ?.get(this) as? R
 
+/**
+ * Sets a private property on a class.
+ *
+ * @param name name of the property to set.
+ */
 inline fun <reified T : Any, R> T.setPrivateProperty(name: String, value: R?) {
     val property = T::class.memberProperties.find { it.name == name }
     if (property is KMutableProperty<*>) {

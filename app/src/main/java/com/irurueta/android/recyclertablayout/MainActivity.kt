@@ -13,15 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.irurueta.android.recyclertablayout
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
+/**
+ * Main activity.
+ */
 class MainActivity : AppCompatActivity() {
+
+    /**
+     * Called when the activity is created.
+     *
+     * @param savedInstanceState saved instance state.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
-        setContentView(R.layout.activity_main)
+        setContentView(com.irurueta.android.recyclertablayout.app.R.layout.activity_main)
     }
 }

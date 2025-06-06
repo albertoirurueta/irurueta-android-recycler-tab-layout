@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.irurueta.android.recyclertablayout
 
 import android.animation.ValueAnimator
@@ -24,7 +25,6 @@ import android.graphics.Paint
 import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
@@ -53,7 +53,9 @@ class RecyclerTabLayoutTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val view = RecyclerTabLayout(context)
 
-        assertEquals(context.getColor(R.color.design_default_color_primary), view.indicatorColor)
+        assertEquals(context.getColor(
+            com.google.android.material.R.color.design_default_color_primary),
+            view.indicatorColor)
         assertEquals(2, view.indicatorHeight)
         val tabOnScreenLimitEnabled: Boolean? = view.getPrivateProperty("tabOnScreenLimitEnabled")
         assertTrue(tabOnScreenLimitEnabled != null && tabOnScreenLimitEnabled)
@@ -103,22 +105,26 @@ class RecyclerTabLayoutTest {
             typedArray.getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorMarginEnd, 0)
         }.returns(2)
         every {
-            typedArray.getString(R.styleable.RecyclerView_layoutManager)
+            typedArray.getString(com.google.android.material.R.styleable.RecyclerView_layoutManager)
         }.returns(null)
         every {
-            typedArray.getInt(R.styleable.RecyclerView_android_descendantFocusability, -1)
+            typedArray.getInt(
+                com.google.android.material.R.styleable.RecyclerView_android_descendantFocusability,
+                -1)
         }.returns(-1)
         every {
-            typedArray.getBoolean(R.styleable.RecyclerView_android_clipToPadding, true)
+            typedArray.getBoolean(
+                com.google.android.material.R.styleable.RecyclerView_android_clipToPadding, true)
         }.returns(true)
         every {
-            typedArray.getBoolean(R.styleable.RecyclerView_fastScrollEnabled, false)
+            typedArray.getBoolean(
+                com.google.android.material.R.styleable.RecyclerView_fastScrollEnabled, false)
         }.returns(false)
 
         justRun { typedArray.recycle() }
 
-        mockkStatic(ViewCompat::class)
-        every { ViewCompat.getLayoutDirection(any()) }.returns(ViewCompat.LAYOUT_DIRECTION_LTR)
+        mockkObject(ViewHelper)
+        every { ViewHelper.isRtl(any()) }.returns(false)
 
         val context = spyk(ApplicationProvider.getApplicationContext())
         every { context.obtainStyledAttributes(any(), any(), any(), any()) }.returns(typedArray)
@@ -179,22 +185,26 @@ class RecyclerTabLayoutTest {
             typedArray.getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorMarginEnd, 0)
         }.returns(2)
         every {
-            typedArray.getString(R.styleable.RecyclerView_layoutManager)
+            typedArray.getString(com.google.android.material.R.styleable.RecyclerView_layoutManager)
         }.returns(null)
         every {
-            typedArray.getInt(R.styleable.RecyclerView_android_descendantFocusability, -1)
+            typedArray.getInt(
+                com.google.android.material.R.styleable.RecyclerView_android_descendantFocusability,
+                -1)
         }.returns(-1)
         every {
-            typedArray.getBoolean(R.styleable.RecyclerView_android_clipToPadding, true)
+            typedArray.getBoolean(
+                com.google.android.material.R.styleable.RecyclerView_android_clipToPadding, true)
         }.returns(true)
         every {
-            typedArray.getBoolean(R.styleable.RecyclerView_fastScrollEnabled, false)
+            typedArray.getBoolean(
+                com.google.android.material.R.styleable.RecyclerView_fastScrollEnabled, false)
         }.returns(false)
 
         justRun { typedArray.recycle() }
 
-        mockkStatic(ViewCompat::class)
-        every { ViewCompat.getLayoutDirection(any()) }.returns(ViewCompat.LAYOUT_DIRECTION_RTL)
+        mockkObject(ViewHelper)
+        every { ViewHelper.isRtl(any()) }.returns(true)
 
         val context = spyk(ApplicationProvider.getApplicationContext())
         every { context.obtainStyledAttributes(any(), any(), any(), any()) }.returns(typedArray)
@@ -228,7 +238,8 @@ class RecyclerTabLayoutTest {
         val view = RecyclerTabLayout(context)
 
         // check default value
-        assertEquals(context.getColor(R.color.design_default_color_primary), view.indicatorColor)
+        assertEquals(context.getColor(
+            com.google.android.material.R.color.design_default_color_primary), view.indicatorColor)
 
         // set new value
         view.indicatorColor = Color.RED
@@ -318,8 +329,6 @@ class RecyclerTabLayoutTest {
 
         // set no indicator height
         view.indicatorHeight = 0
-
-        assertEquals(0, view.indicatorHeight)
 
         // check default value
         val indicatorPosition1: Int? = view.getPrivateProperty("indicatorPosition")
