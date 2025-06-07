@@ -1,0 +1,15 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:com.irurueta.android.recyclertablayout////PointingToDeclaration/lib/com.irurueta.android.recyclertablayout/index.html
+$dokka.location:com.irurueta.android.recyclertablayout/RecyclerTabLayout.Companion///PointingToDeclaration/lib/com.irurueta.android.recyclertablayout/-recycler-tab-layout/-companion/index.html
+$dokka.location:com.irurueta.android.recyclertablayout/RecyclerTabLayout.Companion/DEFAULT_SCROLL_DURATION_MILLIS/#/PointingToDeclaration/lib/com.irurueta.android.recyclertablayout/-recycler-tab-layout/-companion/-d-e-f-a-u-l-t_-s-c-r-o-l-l_-d-u-r-a-t-i-o-n_-m-i-l-l-i-s.html
+$dokka.location:com.irurueta.android.recyclertablayout/RecyclerTabLayout///PointingToDeclaration/lib/com.irurueta.android.recyclertablayout/-recycler-tab-layout/index.html
+$dokka.location:com.irurueta.android.recyclertablayout/RecyclerTabLayout/RecyclerTabLayout/#android.content.Context#android.util.AttributeSet?#kotlin.Int/PointingToDeclaration/lib/com.irurueta.android.recyclertablayout/-recycler-tab-layout/-recycler-tab-layout.html
+$dokka.location:com.irurueta.android.recyclertablayout/RecyclerTabLayout/indicatorColor/#/PointingToDeclaration/lib/com.irurueta.android.recyclertablayout/-recycler-tab-layout/indicator-color.html
+$dokka.location:com.irurueta.android.recyclertablayout/RecyclerTabLayout/indicatorHeight/#/PointingToDeclaration/lib/com.irurueta.android.recyclertablayout/-recycler-tab-layout/indicator-height.html
+$dokka.location:com.irurueta.android.recyclertablayout/RecyclerTabLayout/indicatorMarginLeft/#/PointingToDeclaration/lib/com.irurueta.android.recyclertablayout/-recycler-tab-layout/indicator-margin-left.html
+$dokka.location:com.irurueta.android.recyclertablayout/RecyclerTabLayout/indicatorMarginRight/#/PointingToDeclaration/lib/com.irurueta.android.recyclertablayout/-recycler-tab-layout/indicator-margin-right.html
+$dokka.location:com.irurueta.android.recyclertablayout/RecyclerTabLayout/onDraw/#android.graphics.Canvas/PointingToDeclaration/lib/com.irurueta.android.recyclertablayout/-recycler-tab-layout/on-draw.html
+$dokka.location:com.irurueta.android.recyclertablayout/RecyclerTabLayout/setAutoSelectionMode/#kotlin.Boolean/PointingToDeclaration/lib/com.irurueta.android.recyclertablayout/-recycler-tab-layout/set-auto-selection-mode.html
+$dokka.location:com.irurueta.android.recyclertablayout/RecyclerTabLayout/setCurrentItem/#kotlin.Int#kotlin.Boolean/PointingToDeclaration/lib/com.irurueta.android.recyclertablayout/-recycler-tab-layout/set-current-item.html
+com.irurueta.android.recyclertablayout
