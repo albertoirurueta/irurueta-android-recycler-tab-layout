@@ -93,7 +93,7 @@ sonar {
         property("sonar.junit.reportsPath",
             listOf("build/test-results/testDebugUnitTest",
                 "build/outputs/androidTest-results/connected/debug"))
-        property("sonar.android.lint.report", "build/build/reports/lint-results-debug.xml")
+        property("sonar.android.lint.report", "build/reports/lint-results-debug.xml")
     }
 }
 
