@@ -64,8 +64,8 @@ jobs:
       - name: Convert unit tests coverage results
         run: |
           mkdir lib/build/reports/coverage/test || true
-          java -jar jacoco-0.8.13/lib/jacococli.jar report lib/build/jacoco/testReleaseUnitTest.exec --classfiles lib/build/tmp/kotlin-classes/release --sourcefiles lib/src/main/java --html lib/build/reports/coverage/test || true
-          java -jar jacoco-0.8.13/lib/jacococli.jar report lib/build/jacoco/testReleaseUnitTest.exec --classfiles lib/build/tmp/kotlin-classes/release --sourcefiles lib/src/main/java --xml lib/build/reports/coverage/test/report.xml || true
+          java -jar jacoco-0.8.13/lib/jacococli.jar report lib/build/jacoco/testReleaseUnitTest.exec --classfiles lib/build/tmp/kotlin-classes/debug --sourcefiles lib/src/main/java --html lib/build/reports/coverage/test || true
+          java -jar jacoco-0.8.13/lib/jacococli.jar report lib/build/jacoco/testReleaseUnitTest.exec --classfiles lib/build/tmp/kotlin-classes/debug --sourcefiles lib/src/main/java --xml lib/build/reports/coverage/test/report.xml || true
       - name: Send to Sonarqube
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
