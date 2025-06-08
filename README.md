@@ -4,7 +4,7 @@ Implementation of a tab layout using a recycler view
 [![Build Status](https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/actions/workflows/main.yml/badge.svg)](https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/actions)
 
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=code_smells)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-android-recycler-tab-layout)
-[comment]: [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=coverage)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-android-recycler-tab-layout)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=coverage)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-android-recycler-tab-layout)
 
 [![Duplicated lines](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-android-recycler-tab-layout)
 [![Lines of code](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=ncloc)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-android-recycler-tab-layout)
