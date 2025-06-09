@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.publish)
 }
 
-val libraryVersion = "1.1.0"
+val libraryVersion = "1.1.1"
 
 android {
     namespace = "com.irurueta.android.recyclertablayout"
@@ -129,18 +129,18 @@ mavenPublishing {
 
     signAllPublications()
 
-    coordinates("com.irurueta", "irurueta-android-recycler-view-manager", libraryVersion)
+    coordinates("com.irurueta", "irurueta-android-recycler-tab-layout", libraryVersion)
 
     pom {
-        name.set("irurueta-android-recycler-view-manager")
+        name.set("irurueta-android-recycler-tab-layout")
         description.set("Recycler view utility to simplify adapter notifications when collections of data are modified")
         inceptionYear.set("2025")
-        url.set("https://github.com/albertoirurueta/irurueta-android-recycler-view-manager/")
+        url.set("https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/")
         licenses {
             license {
                 name.set("Apache License 2.0")
-                url.set("https://github.com/albertoirurueta/irurueta-android-recycler-view-manager/blob/main/LICENSE")
-                distribution.set("https://github.com/albertoirurueta/irurueta-android-recycler-view-manager/blob/main/LICENSE")
+                url.set("https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/blob/main/LICENSE")
+                distribution.set("https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/blob/main/LICENSE")
             }
         }
         developers {
@@ -152,9 +152,9 @@ mavenPublishing {
             }
         }
         scm {
-            url.set("https://github.com/albertoirurueta/irurueta-android-recycler-view-manager/")
-            connection.set("scm:git:github.com/albertoirurueta/irurueta-android-recycler-view-manager.git")
-            developerConnection.set("scm:git:ssh://github.com/albertoirurueta/irurueta-android-recycler-view-manager.git")
+            url.set("https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/")
+            connection.set("scm:git:github.com/albertoirurueta/irurueta-android-recycler-tab-layout.git")
+            developerConnection.set("scm:git:ssh://github.com/albertoirurueta/irurueta-android-recycler-tab-layout.git")
         }
     }
 }
