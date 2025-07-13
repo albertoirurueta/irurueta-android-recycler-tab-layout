@@ -40,7 +40,7 @@ line indicator similar to the one used in TabLayout in order to obtain a similar
 Add the following dependency to your project:
 
 ```
-implementation 'com.irurueta:irurueta-android-recycler-tab-layout:1.1.2'
+implementation 'com.irurueta:irurueta-android-recycler-tab-layout:1.1.3'
 ```
 
 The view can be added to your xml layout as the example below:
