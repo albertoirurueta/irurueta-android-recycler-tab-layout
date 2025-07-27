@@ -28,8 +28,23 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
-import io.mockk.*
-import org.junit.Assert.*
+import com.irurueta.android.testutils.callPrivateFunc
+import com.irurueta.android.testutils.getPrivateProperty
+import com.irurueta.android.testutils.setPrivateProperty
+import io.mockk.Called
+import io.mockk.every
+import io.mockk.justRun
+import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.spyk
+import io.mockk.verify
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNotSame
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -53,9 +68,12 @@ class RecyclerTabLayoutTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val view = RecyclerTabLayout(context)
 
-        assertEquals(context.getColor(
-            com.google.android.material.R.color.design_default_color_primary),
-            view.indicatorColor)
+        assertEquals(
+            context.getColor(
+                com.google.android.material.R.color.design_default_color_primary
+            ),
+            view.indicatorColor
+        )
         assertEquals(2, view.indicatorHeight)
         val tabOnScreenLimitEnabled: Boolean? = view.getPrivateProperty("tabOnScreenLimitEnabled")
         assertTrue(tabOnScreenLimitEnabled != null && tabOnScreenLimitEnabled)
@@ -110,15 +128,18 @@ class RecyclerTabLayoutTest {
         every {
             typedArray.getInt(
                 com.google.android.material.R.styleable.RecyclerView_android_descendantFocusability,
-                -1)
+                -1
+            )
         }.returns(-1)
         every {
             typedArray.getBoolean(
-                com.google.android.material.R.styleable.RecyclerView_android_clipToPadding, true)
+                com.google.android.material.R.styleable.RecyclerView_android_clipToPadding, true
+            )
         }.returns(true)
         every {
             typedArray.getBoolean(
-                com.google.android.material.R.styleable.RecyclerView_fastScrollEnabled, false)
+                com.google.android.material.R.styleable.RecyclerView_fastScrollEnabled, false
+            )
         }.returns(false)
 
         justRun { typedArray.recycle() }
@@ -190,15 +211,18 @@ class RecyclerTabLayoutTest {
         every {
             typedArray.getInt(
                 com.google.android.material.R.styleable.RecyclerView_android_descendantFocusability,
-                -1)
+                -1
+            )
         }.returns(-1)
         every {
             typedArray.getBoolean(
-                com.google.android.material.R.styleable.RecyclerView_android_clipToPadding, true)
+                com.google.android.material.R.styleable.RecyclerView_android_clipToPadding, true
+            )
         }.returns(true)
         every {
             typedArray.getBoolean(
-                com.google.android.material.R.styleable.RecyclerView_fastScrollEnabled, false)
+                com.google.android.material.R.styleable.RecyclerView_fastScrollEnabled, false
+            )
         }.returns(false)
 
         justRun { typedArray.recycle() }
@@ -238,8 +262,11 @@ class RecyclerTabLayoutTest {
         val view = RecyclerTabLayout(context)
 
         // check default value
-        assertEquals(context.getColor(
-            com.google.android.material.R.color.design_default_color_primary), view.indicatorColor)
+        assertEquals(
+            context.getColor(
+                com.google.android.material.R.color.design_default_color_primary
+            ), view.indicatorColor
+        )
 
         // set new value
         view.indicatorColor = Color.RED
