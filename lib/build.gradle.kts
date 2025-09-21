@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.publish)
 }
 
-val libraryVersion = "1.1.8"
+val libraryVersion = "1.1.9"
 
 android {
     namespace = "com.irurueta.android.recyclertablayout"
