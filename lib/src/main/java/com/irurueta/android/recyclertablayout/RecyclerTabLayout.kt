@@ -316,7 +316,6 @@ class RecyclerTabLayout @JvmOverloads constructor(
                 indicatorMarginLeft = indicatorMarginStart
                 indicatorMarginRight = indicatorMarginEnd
             }
-
         }
     }
 

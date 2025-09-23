@@ -123,22 +123,22 @@ class RecyclerTabLayoutTest {
             typedArray.getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorMarginEnd, 0)
         }.returns(2)
         every {
-            typedArray.getString(com.google.android.material.R.styleable.RecyclerView_layoutManager)
+            typedArray.getString(androidx.recyclerview.R.styleable.RecyclerView_layoutManager)
         }.returns(null)
         every {
             typedArray.getInt(
-                com.google.android.material.R.styleable.RecyclerView_android_descendantFocusability,
+                androidx.recyclerview.R.styleable.RecyclerView_android_descendantFocusability,
                 -1
             )
         }.returns(-1)
         every {
             typedArray.getBoolean(
-                com.google.android.material.R.styleable.RecyclerView_android_clipToPadding, true
+                androidx.recyclerview.R.styleable.RecyclerView_android_clipToPadding, true
             )
         }.returns(true)
         every {
             typedArray.getBoolean(
-                com.google.android.material.R.styleable.RecyclerView_fastScrollEnabled, false
+                androidx.recyclerview.R.styleable.RecyclerView_fastScrollEnabled, false
             )
         }.returns(false)
 
@@ -206,22 +206,22 @@ class RecyclerTabLayoutTest {
             typedArray.getDimensionPixelSize(R.styleable.RecyclerTabLayout_tabIndicatorMarginEnd, 0)
         }.returns(2)
         every {
-            typedArray.getString(com.google.android.material.R.styleable.RecyclerView_layoutManager)
+            typedArray.getString(androidx.recyclerview.R.styleable.RecyclerView_layoutManager)
         }.returns(null)
         every {
             typedArray.getInt(
-                com.google.android.material.R.styleable.RecyclerView_android_descendantFocusability,
+                androidx.recyclerview.R.styleable.RecyclerView_android_descendantFocusability,
                 -1
             )
         }.returns(-1)
         every {
             typedArray.getBoolean(
-                com.google.android.material.R.styleable.RecyclerView_android_clipToPadding, true
+                androidx.recyclerview.R.styleable.RecyclerView_android_clipToPadding, true
             )
         }.returns(true)
         every {
             typedArray.getBoolean(
-                com.google.android.material.R.styleable.RecyclerView_fastScrollEnabled, false
+                androidx.recyclerview.R.styleable.RecyclerView_fastScrollEnabled, false
             )
         }.returns(false)
 
