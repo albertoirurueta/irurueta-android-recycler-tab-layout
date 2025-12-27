@@ -9,14 +9,14 @@ plugins {
     alias(libs.plugins.publish)
 }
 
-val libraryVersion = "1.1.10"
+val libraryVersion = "1.1.11"
 
 android {
     namespace = "com.irurueta.android.recyclertablayout"
     compileSdk = 36
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
         testOptions.targetSdk = 36
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
