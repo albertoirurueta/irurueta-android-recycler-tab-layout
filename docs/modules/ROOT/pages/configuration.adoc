@@ -1,0 +1,109 @@
+= Configuration reference
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`RecyclerTabLayout` can be configured with XML attributes when declared in a layout, and some of the same settings
+are available as properties at runtime. Defaults come from the library's `RecyclerTabLayout` style.
+
+[#xml-attributes]
+== XML attributes
+
+All attributes use the `app:` (`res-auto`) namespace.
+
+[cols="2,1,1,4",options="header"]
+|===
+|Attribute |Format |Default |Description
+
+|`tabIndicatorColor`
+|color
+|`@color/design_default_color_primary`
+|Color of the line drawn under the selected tab.
+
+|`tabIndicatorHeight`
+|dimension
+|`2dp`
+|Height of the indicator line. `0` hides the indicator.
+
+|`tabIndicatorMarginStart`
+|dimension
+|`0`
+|Inset of the indicator from the start edge of the selected tab. In right-to-left layouts the start edge is on
+the right.
+
+|`tabIndicatorMarginEnd`
+|dimension
+|`0`
+|Inset of the indicator from the end edge of the selected tab.
+
+|`tabMinWidth`
+|dimension
+|`72dp`
+|Estimated tab width. When the tab being selected is not laid out yet (it is far off screen), the view uses this
+width to scroll it to the centre. Set it to roughly the width of your tab views.
+
+|`tabOnScreenLimitEnabled`
+|boolean
+|`true`
+|Whether `tabMinWidth` is used. When `false`, a tab that isn't laid out yet is scrolled to the start of the view
+instead of the centre.
+
+|`scrollEnabled`
+|boolean
+|`true`
+|Whether users can scroll the tab strip horizontally. When `false`, only `setCurrentItem` moves it.
+|===
+
+To change the defaults for every `RecyclerTabLayout` in an app, apply a style that extends `RecyclerTabLayout`:
+
+[source,xml]
+----
+<style name="AppRecyclerTabLayout" parent="RecyclerTabLayout">
+    <item name="tabIndicatorColor">?attr/colorSecondary</item>
+    <item name="tabIndicatorHeight">3dp</item>
+    <item name="tabMinWidth">96dp</item>
+</style>
+----
+
+[source,xml]
+----
+<com.irurueta.android.recyclertablayout.RecyclerTabLayout
+    style="@style/AppRecyclerTabLayout"
+    android:layout_width="match_parent"
+    android:layout_height="48dp" />
+----
+
+== Properties and methods
+
+[cols="2,4",options="header"]
+|===
+|Member |Description
+
+|`indicatorColor: Int`
+|Indicator color, as a 32-bit ARGB integer.
+
+|`indicatorHeight: Int`
+|Indicator height in pixels.
+
+|`indicatorMarginLeft: Int`, `indicatorMarginRight: Int`
+|Left and right indicator insets in pixels. When the view is created, they are set from `tabIndicatorMarginStart`
+and `tabIndicatorMarginEnd` according to the layout direction.
+
+|`setCurrentItem(position: Int, smoothScroll: Boolean = true)`
+|Selects the tab at `position`, scrolling it into view and moving the indicator under it. The indicator moves with
+an animation unless `smoothScroll` is `false`.
+
+|`setAutoSelectionMode(autoSelect: Boolean)`
+|When `true`, a scroll gesture that ends between two tabs selects the tab closest to the centre of the view.
+Disabled by default.
+
+|`DEFAULT_SCROLL_DURATION_MILLIS`
+|Duration of the indicator animation: 200 ms.
+|===
+
+Call `invalidate()` after changing the indicator properties at runtime so that the view is redrawn.
+
+Because `RecyclerTabLayout` is a `RecyclerView`, every `RecyclerView` API is available too: `adapter`,
+`addOnScrollListener`, `scrollToPosition`, and so on. The exception is `layoutManager`, which the view manages
+itself.
+
+The full API is documented in the xref:reference.adoc[API documentation].

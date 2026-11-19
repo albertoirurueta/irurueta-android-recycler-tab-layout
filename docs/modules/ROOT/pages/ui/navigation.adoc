@@ -1,0 +1,12 @@
+= Navigation flows
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+The sample app has a single screen, so there is no navigation between screens: launching the app opens
+`MainActivity`.
+
+[mermaid]
+....
+flowchart LR
+    L(["App launch"]) --> M["MainActivity"]
+....

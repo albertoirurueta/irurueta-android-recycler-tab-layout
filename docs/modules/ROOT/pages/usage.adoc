@@ -1,0 +1,131 @@
+= Usage
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+This page shows how to add `RecyclerTabLayout` (package `com.irurueta.android.recyclertablayout`) to a screen, supply
+its tabs through an adapter, select tabs and keep it in sync with a `ViewPager2`. Every attribute and property
+mentioned here is listed with its default value in the xref:configuration.adoc[Configuration reference].
+
+TIP: The Kotlin examples on this page are copied from `DocumentationExamplesTest` in the `lib` module's unit tests,
+which compiles and runs every one of them and fails when a snippet here no longer matches.
+
+== Adding the view to a layout
+
+`RecyclerTabLayout` extends `RecyclerView`, so it is declared like any other view. Custom attributes use the `app:`
+(`res-auto`) namespace:
+
+[source,xml]
+----
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.irurueta.android.recyclertablayout.RecyclerTabLayout
+        android:id="@+id/recycler_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:tabIndicatorColor="?attr/colorPrimary"
+        app:tabIndicatorHeight="2dp" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>
+----
+
+The view sets up its own horizontal `LinearLayoutManager` when it is created. Do not replace the layout manager:
+the indicator relies on it to find the selected tab.
+
+== Creating the view in code
+
+`RecyclerTabLayout` has a `@JvmOverloads` constructor `(context, attrs = null, defStyleAttr = 0)`, so it can also be
+created programmatically. It then uses the default `RecyclerTabLayout` style:
+
+[source,kotlin]
+----
+include::example$createInCode.kt[]
+----
+
+== Defining tabs with an adapter
+
+Tabs are the items of a regular `RecyclerView.Adapter`. Each tab can be any view: a `TextView`, an icon, or a
+thumbnail of an image, which is where recycling pays off. The adapter below creates one `TextView` per visible tab and
+reports clicks through a callback:
+
+[source,kotlin]
+----
+include::example$tabAdapter.kt[]
+----
+
+* Make the tab views' height `MATCH_PARENT`. The indicator is drawn along the bottom edge of the
+  `RecyclerTabLayout`, under the selected tab's view.
+* Give tab views a minimum width (72 dp here, like Material tabs) and a click listener, so that they are large
+  enough to be easy touch targets.
+* Use `bindingAdapterPosition` inside the listener rather than the `position` captured by `onBindViewHolder`,
+  because recycled views are bound again for other positions.
+
+== Setting the adapter
+
+Set the adapter and select a tab when it is clicked. Only the visible tab views are created, however many tabs the
+adapter reports:
+
+[source,kotlin]
+----
+include::example$setAdapter.kt[]
+----
+
+== Selecting a tab
+
+`setCurrentItem(position, smoothScroll = true)` selects a tab. The list scrolls to bring that tab into view and the
+indicator moves under it. By default the indicator moves with an animation that lasts
+`RecyclerTabLayout.DEFAULT_SCROLL_DURATION_MILLIS` (200 ms). Pass `smoothScroll = false` to jump straight there:
+
+[source,kotlin]
+----
+include::example$setCurrentItem.kt[]
+----
+
+== Selecting tabs automatically while scrolling
+
+By default, scrolling the tabs by hand does not change the selection. With automatic selection enabled, when a
+scroll gesture stops between two tabs, the tab closest to the centre of the view is selected:
+
+[source,kotlin]
+----
+include::example$autoSelection.kt[]
+----
+
+To let users scroll the tab strip at all, keep `app:scrollEnabled` at its default (`true`). See
+xref:configuration.adoc#xml-attributes[XML attributes].
+
+== Keeping tabs in sync with a ViewPager2
+
+`RecyclerTabLayout` doesn't depend on any pager. Connect it to a `ViewPager2` (or anything else that has pages)
+with two callbacks: one from the pager to the tabs and one from the tabs to the pager:
+
+[source,kotlin]
+----
+include::example$viewPager.kt[]
+----
+
+When the pager selects a page, its callback calls `setCurrentItem`. When a tab is clicked, the adapter's callback
+changes the pager's `currentItem`, and the pager callback then moves the indicator. You don't need any extra
+bookkeeping.
+
+== Customizing the indicator
+
+Set the indicator's color, height and margins in XML (see xref:configuration.adoc[Configuration reference]) or at
+runtime. The values are in pixels, so convert from dp with the display density, then call `invalidate()` to redraw:
+
+[source,kotlin]
+----
+include::example$customizeIndicator.kt[]
+----
+
+To hide the indicator, set `indicatorHeight` to `0` or `indicatorColor` to `Color.TRANSPARENT`.
