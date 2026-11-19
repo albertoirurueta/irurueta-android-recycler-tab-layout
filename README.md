@@ -26,7 +26,7 @@ Implementation of a tab layout using a recycler view.
 | --- | --- |
 | Language | Kotlin 2.4.21 (JVM target 17) |
 | Build tool | Gradle 9.9.1 (Kotlin DSL) |
-| Current development version | `1.1.13-SNAPSHOT` |
+| Current development version | `1.2.0-SNAPSHOT` |
 | Latest release | `1.1.12` |
 | Platform | Android |
 | Min / compile SDK | `minSdk` 26 (Android 8.0) / `compileSdk` 36 |

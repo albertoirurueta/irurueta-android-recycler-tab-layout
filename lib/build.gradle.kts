@@ -11,7 +11,7 @@ plugins {
     alias(libs.plugins.publish)
 }
 
-val libraryVersion = "1.1.13-SNAPSHOT"
+val libraryVersion = "1.2.0-SNAPSHOT"
 
 android {
     namespace = "com.irurueta.android.recyclertablayout"
