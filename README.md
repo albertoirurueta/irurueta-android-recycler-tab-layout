@@ -1,30 +1,55 @@
 # irurueta-android-recycler-tab-layout
-Implementation of a tab layout using a recycler view
 
-[![Build Status](https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/actions/workflows/main.yml/badge.svg)](https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/actions)
+Implementation of a tab layout using a recycler view.
 
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=code_smells)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-android-recycler-tab-layout)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=coverage)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-android-recycler-tab-layout)
+[![Release](https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/actions/workflows/main.yml/badge.svg)](https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/actions/workflows/main.yml)
+[![Develop](https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/actions/workflows/develop.yml/badge.svg?branch=develop)](https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/actions/workflows/develop.yml)
+[![Security](https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/actions/workflows/security.yml/badge.svg)](https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/actions/workflows/security.yml)
 
-[![Duplicated lines](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-android-recycler-tab-layout)
-[![Lines of code](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=ncloc)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-android-recycler-tab-layout)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=albertoirurueta_irurueta-android-recycler-tab-layout)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=albertoirurueta_irurueta-android-recycler-tab-layout)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=albertoirurueta_irurueta-android-recycler-tab-layout)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=albertoirurueta_irurueta-android-recycler-tab-layout)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=bugs)](https://sonarcloud.io/summary/new_code?id=albertoirurueta_irurueta-android-recycler-tab-layout)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=albertoirurueta_irurueta-android-recycler-tab-layout)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=coverage)](https://sonarcloud.io/summary/new_code?id=albertoirurueta_irurueta-android-recycler-tab-layout)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=albertoirurueta_irurueta-android-recycler-tab-layout)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=albertoirurueta_irurueta-android-recycler-tab-layout)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=albertoirurueta_irurueta-android-recycler-tab-layout)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=albertoirurueta_irurueta-android-recycler-tab-layout)
 
-[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-android-recycler-tab-layout)
-[![Quality gate](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=alert_status)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-android-recycler-tab-layout)
-[![Reliability](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-android-recycler-tab-layout)
+[![Maven Central](https://img.shields.io/maven-central/v/com.irurueta/irurueta-android-recycler-tab-layout)](https://central.sonatype.com/artifact/com.irurueta/irurueta-android-recycler-tab-layout)
 
-[![Security](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=security_rating)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-android-recycler-tab-layout)
-[![Technical debt](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=sqale_index)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-android-recycler-tab-layout)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=albertoirurueta_irurueta-android-recycler-tab-layout&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=albertoirurueta_irurueta-android-recycler-tab-layout)
+## Project Status
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.irurueta/irurueta-android-recycler-tab-layout/badge.svg)](https://search.maven.org/artifact/com.irurueta/irurueta-android-recycler-tab-layout/1.0.0/aar)
+| Item | Value |
+| --- | --- |
+| Language | Kotlin 2.4.21 (JVM target 17) |
+| Build tool | Gradle 9.9.1 (Kotlin DSL) |
+| Current development version | `1.1.12-SNAPSHOT` |
+| Latest release | `1.1.11` |
+| Platform | Android |
+| Min / compile SDK | `minSdk` 26 (Android 8.0) / `compileSdk` 36 |
+| Kotlin / AGP | Kotlin 2.4.21 / Android Gradle Plugin 9.5.1 |
+| License | Apache License 2.0 |
+| CI | GitHub Actions: `develop` builds (tests, Lint, SonarCloud, docs, snapshot publish), releases (Maven Central publish and GitHub Pages docs) and weekly security scans |
+| Quality | SonarCloud, JaCoCo coverage, Android Lint |
+| Distribution | Maven Central (`com.irurueta:irurueta-android-recycler-tab-layout`) |
 
-[API Documentation](http://albertoirurueta.github.io/irurueta-android-recycler-tab-layout)
+## Documentation
+
+- [Documentation site](https://albertoirurueta.github.io/irurueta-android-recycler-tab-layout/) (Antora): installation,
+  usage, configuration reference and building instructions.
+- [Usage page](docs/modules/ROOT/pages/usage.adoc) with complete examples (also published as the Usage page of the
+  documentation site).
+- [API documentation](https://albertoirurueta.github.io/irurueta-android-recycler-tab-layout/api/) (Dokka).
+- [SonarCloud dashboard](https://sonarcloud.io/summary/new_code?id=albertoirurueta_irurueta-android-recycler-tab-layout).
+- [Changelog](CHANGELOG.md).
 
 ## Overview
 
-This library contains an implementation of a view similar in appearance to Android's TabLayout.
-https://developer.android.com/reference/com/google/android/material/tabs/TabLayout
+This library contains an implementation of a view similar in appearance to Android's
+[TabLayout](https://developer.android.com/reference/com/google/android/material/tabs/TabLayout).
 
 However, TabLayout implementation is not appropriate in situations where there are many items to be
 displayed and each of those items contain complex or memory intensive views such as when attempting
@@ -35,97 +60,124 @@ line indicator similar to the one used in TabLayout in order to obtain a similar
 
 ![Demo](docs/video.gif)
 
-##Usage
+## Installation
 
-Add the following dependency to your project:
+The library is published to Maven Central. Make sure `mavenCentral()` is among your repositories and add the
+dependency to your module's `build.gradle.kts`:
 
-```
-implementation 'com.irurueta:irurueta-android-recycler-tab-layout:1.1.11'
-```
+Latest release:
 
-The view can be added to your xml layout as the example below:
-
-```
-   <com.irurueta.android.recyclertablayout.RecyclerTabLayout
-        android:id="@+id/recycler_tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-```
-
-Since the RecyclerTabLayout extends from RecyclerView,
-in order to display items, an adapter, a view holder and item views, must be set:
-
-First we define a view to use on each item of the adapter:
-```
-class TabView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : RelativeLayout(context, attrs, defStyleAttr) {
-
-    private var tabNameView: TextView? = null
-
-    var tabName: String?
-        get() = tabNameView?.text?.toString()
-        set(value) {
-            tabNameView?.text = value
-        }
-
-    init {
-        // Load layout
-        LayoutInflater.from(context).inflate(R.layout.tab_view, this)
-
-        tabNameView = findViewById(R.id.tab_name)
-    }
+```kotlin
+dependencies {
+    implementation("com.irurueta:irurueta-android-recycler-tab-layout:1.1.11")
 }
 ```
 
-Then a view holder for each item:
-```
-class TabViewHolder(val view: TabView) : RecyclerView.ViewHolder(view)
+The Installation page of the [documentation site](https://albertoirurueta.github.io/irurueta-android-recycler-tab-layout/)
+also covers other build script forms.
+
+## Usage
+
+`RecyclerTabLayout` extends `RecyclerView`, so it is added to your xml layout like any other view:
+
+```xml
+<com.irurueta.android.recyclertablayout.RecyclerTabLayout
+    android:id="@+id/recycler_tab_layout"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    app:tabIndicatorColor="?attr/colorPrimary"
+    app:tabIndicatorHeight="2dp" />
 ```
 
-Then an adapter:
-```
-class TabAdapter(val count: Int) : RecyclerView.Adapter<TabViewHolder>() {
+The view sets up its own horizontal `LinearLayoutManager`; do not replace it, since the indicator relies on it to find
+the selected tab.
+
+Tabs are supplied through a regular `RecyclerView.Adapter`, for instance:
+
+```kotlin
+class TabViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
+
+class TabAdapter(
+    private val titles: List<String>,
+    private val onTabClick: (position: Int) -> Unit
+) : RecyclerView.Adapter<TabViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TabViewHolder {
-        val v = TabView(parent.context)
-        return TabViewHolder(v)
+        val density = parent.resources.displayMetrics.density
+        val textView = TextView(parent.context)
+        textView.gravity = Gravity.CENTER
+        textView.minWidth = (72 * density).toInt()
+        textView.layoutParams = RecyclerView.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        return TabViewHolder(textView)
     }
 
     override fun onBindViewHolder(holder: TabViewHolder, position: Int) {
-        holder.view.tabName = position.toString()
+        holder.textView.text = titles[position]
+        holder.textView.setOnClickListener {
+            val clickedPosition = holder.bindingAdapterPosition
+            if (clickedPosition != RecyclerView.NO_POSITION) {
+                onTabClick(clickedPosition)
+            }
+        }
     }
 
-    override fun getItemCount(): Int {
-        return count
-    }
+    override fun getItemCount(): Int = titles.size
 }
 ```
 
-And finally, we set the adapter to the recycler tab layout:
-```
-class RecyclerTabLayoutActivity : Activity() {
+Then set the adapter on the view (obtained with `findViewById<RecyclerTabLayout>(R.id.recycler_tab_layout)`):
 
-    private var recyclerTabLayout: RecyclerTabLayout? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.recycler_tab_layout_view_activity)
-        recyclerTabLayout = findById(R.id.recycler_tab_layout))
-        recyclerTabLayout.adapter = TabAdapter(COUNT)
-    }
-    
-    private companion object {
-        const val COUNT = 20
-    }    
+```kotlin
+// 10,000 tabs: only the visible tab views are created, and they are recycled on scroll
+val titles = List(10_000) { "Tab $it" }
+recyclerTabLayout.adapter = TabAdapter(titles) { position ->
+    recyclerTabLayout.setCurrentItem(position)
 }
-
 ```
 
-By setting a click listener for each item view, the selected item on the RecyclerTabLayout can be
-changed by calling:
+The selected tab can be changed from code:
+
+```kotlin
+// scroll to tab 5 and animate the indicator towards it
+recyclerTabLayout.setCurrentItem(5)
+
+// select tab 5 immediately, without animation (for instance when restoring state)
+recyclerTabLayout.setCurrentItem(5, smoothScroll = false)
 ```
-recyclerTabLayout.setCurrentItem(position)
+
+And kept in sync with a `ViewPager2`:
+
+```kotlin
+// selecting a page selects the matching tab
+viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+    override fun onPageSelected(position: Int) {
+        recyclerTabLayout.setCurrentItem(position)
+    }
+})
+
+// clicking a tab shows the matching page
+recyclerTabLayout.adapter = TabAdapter(titles) { position ->
+    viewPager.currentItem = position
+}
 ```
+
+See the [Usage page](docs/modules/ROOT/pages/usage.adoc) of the documentation site for full examples (creating the view in code, automatic selection while scrolling and
+indicator customization), and the Configuration page for every xml attribute and its default value.
+
+## Contributing
+
+This repository follows a gitflow branching model:
+
+- `develop` is the integration branch: feature and fix branches are opened against it, and every push builds,
+  tests and publishes a `-SNAPSHOT` version.
+- `main` holds releases: publishing a GitHub release from `main` deploys the library to Maven Central and the
+  documentation to GitHub Pages, after which the release is merged back into `develop`.
+
+Notable changes for each version are listed in the [Changelog](CHANGELOG.md).
+
+## License
+
+This project is licensed under the Apache License 2.0. See [LICENSE](LICENSE).

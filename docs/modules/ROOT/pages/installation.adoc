@@ -1,0 +1,48 @@
+= Installation
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+The library is published to Maven Central as an Android library (AAR).
+
+[cols="1,3"]
+|===
+|Group ID |`com.irurueta`
+|Artifact ID |`irurueta-android-recycler-tab-layout`
+|Latest release |`1.1.11`
+|License |Apache License 2.0
+|===
+
+== Requirements
+
+* Android `minSdk` 26 (Android 8.0) or later.
+* The library is compiled against SDK 36 with Java/Kotlin JVM target 17.
+
+== Gradle (Kotlin DSL)
+
+Make sure `mavenCentral()` is among your repositories (in `settings.gradle.kts`), then add the dependency to your
+module's `build.gradle.kts`.
+
+Latest release:
+
+[source,kotlin]
+----
+dependencies {
+    implementation("com.irurueta:irurueta-android-recycler-tab-layout:1.1.11")
+}
+----
+
+== Gradle (Groovy DSL)
+
+Latest release:
+
+[source,groovy]
+----
+dependencies {
+    implementation 'com.irurueta:irurueta-android-recycler-tab-layout:1.1.11'
+}
+----
+
+== Building from source
+
+Clone the repository and include the `lib` module in your build, or publish it to your local Maven repository with
+`./gradlew :lib:publishToMavenLocal`.

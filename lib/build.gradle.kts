@@ -1,3 +1,5 @@
+import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+
 import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -9,7 +11,7 @@ plugins {
     alias(libs.plugins.publish)
 }
 
-val libraryVersion = "1.1.11"
+val libraryVersion = "1.1.12-SNAPSHOT"
 
 android {
     namespace = "com.irurueta.android.recyclertablayout"
@@ -49,7 +51,19 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
+            all { test ->
+                // Robolectric loads classes through its own sandbox classloader, which JaCoCo
+                // only instruments when classes without a location are included
+                test.extensions.configure(JacocoTaskExtension::class.java) {
+                    isIncludeNoLocationClasses = true
+                    excludes = listOf("jdk.internal.*")
+                }
+            }
         }
+    }
+    lint {
+        // SARIF report is uploaded to GitHub code scanning by the CI workflows
+        sarifReport = true
     }
     packaging {
         resources {
@@ -61,6 +75,14 @@ android {
 kotlin {
     compilerOptions {
         jvmTarget = JvmTarget.JVM_17
+    }
+}
+
+dokka {
+    dokkaSourceSets {
+        named("main") {
+            includes.from("module.md")
+        }
     }
 }
 
@@ -90,12 +112,12 @@ sonar {
 
         property("sonar.coverage.jacoco.xmlReportPaths",
             listOf("build/reports/coverage/androidTest/debug/connected/report.xml",
-                "build/reports/coverage/test/report.xml"))
+                "build/reports/coverage/test/debug/report.xml"))
         property("sonar.java.coveragePlugin", "jacoco")
-        property("sonar.junit.reportsPath",
+        property("sonar.junit.reportPaths",
             listOf("build/test-results/testDebugUnitTest",
                 "build/outputs/androidTest-results/connected/debug"))
-        property("sonar.android.lint.report", "build/reports/lint-results-debug.xml")
+        property("sonar.androidLint.reportPaths", "build/reports/lint-results-debug.xml")
     }
 }
 
@@ -131,7 +153,7 @@ mavenPublishing {
 
     pom {
         name.set("irurueta-android-recycler-tab-layout")
-        description.set("Recycler view utility to simplify adapter notifications when collections of data are modified")
+        description.set("Tab layout implemented on top of a RecyclerView that draws and recycles tab views, supporting very large numbers of tabs with low memory usage")
         inceptionYear.set("2025")
         url.set("https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/")
         licenses {

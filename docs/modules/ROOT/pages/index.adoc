@@ -1,0 +1,39 @@
+= Irurueta Android Recycler Tab Layout
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`RecyclerTabLayout` is an Android view similar in appearance to Material's
+https://developer.android.com/reference/com/google/android/material/tabs/TabLayout[`TabLayout`], but built on top of
+`RecyclerView`.
+
+== Why it exists
+
+`TabLayout` creates a view for every tab up front. That is not appropriate when there are many tabs, or when each tab
+contains complex or memory-intensive views such as image thumbnails. `RecyclerTabLayout` extends `RecyclerView`, so
+tab views are created by an adapter and recycled as they scroll off screen, while the view draws a line indicator
+under the selected tab with the same animated behavior as `TabLayout`.
+
+== Core concepts
+
+* *Adapter-driven tabs*: tabs are supplied through a regular `RecyclerView.Adapter`, view holder and item view.
+* *Selection indicator*: a line drawn under the selected tab, whose color, height and margins are configurable
+  (`indicatorColor`, `indicatorHeight`, `indicatorMarginLeft`, `indicatorMarginRight`, or the `tabIndicator*` XML
+  attributes).
+* *Programmatic selection*: `setCurrentItem(position, smoothScroll)` moves the selection and animates the indicator;
+  `setAutoSelectionMode(autoSelect)` selects tabs automatically while scrolling.
+
+[mermaid]
+....
+flowchart LR
+    A["RecyclerView.Adapter"] -->|"binds tab views"| R["RecyclerTabLayout"]
+    C["setCurrentItem(position)"] --> R
+    R -->|"draws"| I["Animated selection indicator"]
+....
+
+== Next steps
+
+* xref:installation.adoc[Installation]: add the library to your project.
+* xref:usage.adoc[Usage]: adapters, selecting tabs and syncing with a `ViewPager2`, with code examples.
+* xref:configuration.adoc[Configuration reference]: XML attributes, properties and defaults.
+* xref:ui/index.adoc[User interface]: the view and the sample app.
+* xref:reference.adoc[Reference]: API documentation and generated reports.
