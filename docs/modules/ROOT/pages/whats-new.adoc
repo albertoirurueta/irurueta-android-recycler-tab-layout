@@ -11,6 +11,7 @@ https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/blob/mai
 * New CI workflows build and test every pull request and run security checks. They publish releases to Maven Central
   and deploy this documentation site to GitHub Pages.
 * New documentation site, with usage examples that are compiled and run as unit tests.
+* Material Components dependency updated to 1.14.0.
 
 == 1.1.11
 
