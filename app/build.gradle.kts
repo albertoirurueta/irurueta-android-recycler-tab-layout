@@ -18,8 +18,8 @@ android {
         applicationId = "com.irurueta.android.recyclertablayout.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 9
-        versionName = "1.1.11"
+        versionCode = 10
+        versionName = "1.1.12"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -55,6 +55,10 @@ android {
         compose = true
         buildConfig = true
     }
+    lint {
+        // SARIF report is uploaded to GitHub code scanning by the CI workflows
+        sarifReport = true
+    }
 }
 kotlin {
     compilerOptions {
@@ -64,36 +68,24 @@ kotlin {
 
 sonar {
     properties {
-        property("sonar.scanner.skipJreProvisioning", true)
         property("sonar.projectKey", "albertoirurueta_irurueta-android-recycler-tab-layout")
         property("sonar.projectName", "irurueta-android-recycler-tab-layout-${project.name}")
         property("sonar.organization", "albertoirurueta-github")
         property("sonar.host.url", "https://sonarcloud.io")
 
-        property("sonar.tests", listOf("src/test/java", "src/androidTest/java"))
-        property("sonar.test.inclusions",
-            listOf("**/*Test*/**", "src/androidTest/**", "src/test/**"))
-        property("sonar.test.exclusions",
-            listOf("**/*Test*/**", "src/androidTest/**", "src/test/**"))
+        // Source and test directories, binaries and libraries are detected by the Sonar Gradle plugin from the
+        // Android variants. Setting sonar.sources/sonar.tests here as well makes files be indexed twice.
         property("sonar.sourceEncoding", "UTF-8")
-        property("sonar.sources", "src/main/java")
-        property("sonar.exclusions", "**/*Test*/**,*.json,'**/*test*/**,**/.gradle/**,**/R.class")
-
-        val libraries = project.android.sdkDirectory.path + "/platforms/android-36/android.jar"
-        property("sonar.libraries", libraries)
-        property("sonar.java.libraries", libraries)
-        property("sonar.java.test.libraries", libraries)
-        property("sonar.binaries", "build/intermediates/javac/debug/classes,build/tmp/kotlin-classes/debug")
-        property("sonar.java.binaries", "build/intermediates/javac/debug/classes,build/tmp/kotlin-classes/debug")
+        property("sonar.exclusions", "**/*.json,**/.gradle/**,**/R.class")
 
         property("sonar.coverage.jacoco.xmlReportPaths",
             listOf("build/reports/coverage/androidTest/debug/connected/report.xml",
-                "build/reports/coverage/test/report.xml"))
+                "build/reports/coverage/test/debug/report.xml"))
         property("sonar.java.coveragePlugin", "jacoco")
-        property("sonar.junit.reportsPath",
-            listOf("build/build/test-results/testDebugUnitTest",
-                "build/build/outputs/androidTest-results/connected/debug"))
-        property("sonar.android.lint.report", "build/build/reports/lint-results-debug.xml")
+        property("sonar.junit.reportPaths",
+            listOf("build/test-results/testDebugUnitTest",
+                "build/outputs/androidTest-results/connected/debug"))
+        property("sonar.androidLint.reportPaths", "build/reports/lint-results-debug.xml")
     }
 }
 

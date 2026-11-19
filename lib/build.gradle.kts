@@ -1,3 +1,5 @@
+import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+
 import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -9,7 +11,7 @@ plugins {
     alias(libs.plugins.publish)
 }
 
-val libraryVersion = "1.1.11"
+val libraryVersion = "1.1.12"
 
 android {
     namespace = "com.irurueta.android.recyclertablayout"
@@ -49,7 +51,19 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
+            all { test ->
+                // Robolectric loads classes through its own sandbox classloader, which JaCoCo
+                // only instruments when classes without a location are included
+                test.extensions.configure(JacocoTaskExtension::class.java) {
+                    isIncludeNoLocationClasses = true
+                    excludes = listOf("jdk.internal.*")
+                }
+            }
         }
+    }
+    lint {
+        // SARIF report is uploaded to GitHub code scanning by the CI workflows
+        sarifReport = true
     }
     packaging {
         resources {
@@ -64,38 +78,34 @@ kotlin {
     }
 }
 
+dokka {
+    dokkaSourceSets {
+        named("main") {
+            includes.from("module.md")
+        }
+    }
+}
+
 sonar {
     properties {
-        property("sonar.scanner.skipJreProvisioning", true)
         property("sonar.projectKey", "albertoirurueta_irurueta-android-recycler-tab-layout")
         property("sonar.projectName", "irurueta-android-recycler-tab-layout")
         property("sonar.organization", "albertoirurueta-github")
         property("sonar.host.url", "https://sonarcloud.io")
 
-        property("sonar.tests", listOf("src/test/java", "src/androidTest/java"))
-        property("sonar.test.inclusions",
-            listOf("**/*Test*/**", "src/androidTest/**", "src/test/**"))
-        property("sonar.test.exclusions",
-            listOf("**/*Test*/**", "src/androidTest/**", "src/test/**"))
+        // Source and test directories, binaries and libraries are detected by the Sonar Gradle plugin from the
+        // Android variants. Setting sonar.sources/sonar.tests here as well makes files be indexed twice.
         property("sonar.sourceEncoding", "UTF-8")
-        property("sonar.sources", "src/main/java")
-        property("sonar.exclusions", "**/*Test*/**,*.json,'**/*test*/**,**/.gradle/**,**/R.class")
-
-        val libraries = project.android.sdkDirectory.path + "/platforms/android-36/android.jar"
-        property("sonar.libraries", libraries)
-        property("sonar.java.libraries", libraries)
-        property("sonar.java.test.libraries", libraries)
-        property("sonar.binaries", "build/intermediates/javac/debug/classes,build/tmp/kotlin-classes/debug")
-        property("sonar.java.binaries", "build/intermediates/javac/debug/classes,build/tmp/kotlin-classes/debug")
+        property("sonar.exclusions", "**/*.json,**/.gradle/**,**/R.class")
 
         property("sonar.coverage.jacoco.xmlReportPaths",
             listOf("build/reports/coverage/androidTest/debug/connected/report.xml",
-                "build/reports/coverage/test/report.xml"))
+                "build/reports/coverage/test/debug/report.xml"))
         property("sonar.java.coveragePlugin", "jacoco")
-        property("sonar.junit.reportsPath",
+        property("sonar.junit.reportPaths",
             listOf("build/test-results/testDebugUnitTest",
                 "build/outputs/androidTest-results/connected/debug"))
-        property("sonar.android.lint.report", "build/reports/lint-results-debug.xml")
+        property("sonar.androidLint.reportPaths", "build/reports/lint-results-debug.xml")
     }
 }
 
@@ -131,7 +141,7 @@ mavenPublishing {
 
     pom {
         name.set("irurueta-android-recycler-tab-layout")
-        description.set("Recycler view utility to simplify adapter notifications when collections of data are modified")
+        description.set("Tab layout implemented on top of a RecyclerView that draws and recycles tab views, supporting very large numbers of tabs with low memory usage")
         inceptionYear.set("2025")
         url.set("https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/")
         licenses {
