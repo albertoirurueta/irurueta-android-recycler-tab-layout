@@ -5,7 +5,7 @@ NOTE: This documentation was generated with the assistance of AI. Please report 
 The complete list of changes in each release is in the repository's
 https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/blob/main/CHANGELOG.md[CHANGELOG].
 
-== Unreleased
+== 1.1.12
 
 * The repository now uses gitflow: development happens on `develop`, and `main` only receives releases.
 * New CI workflows build and test every pull request and run security checks. They publish releases to Maven Central
