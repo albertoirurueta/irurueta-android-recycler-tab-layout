@@ -83,6 +83,11 @@ dokka {
         named("main") {
             includes.from("module.md")
         }
+        configureEach {
+            if (name != "main") {
+                suppress.set(true)
+            }
+        }
     }
 }
 
