@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Repository moved to a gitflow branching model with a `develop` integration branch; development version is now
   `1.2.0-SNAPSHOT`.
 - Build toolchain upgraded to Gradle 9.9.1, Android Gradle Plugin 9.5.1 and Kotlin 2.4.21.
+- Test-only dependency update (`irurueta-android-test-utils` 1.3.3); no library source changes.
 
 ### Removed
 
