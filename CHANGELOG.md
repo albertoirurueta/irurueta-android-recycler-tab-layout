@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.1.12] - 2026-11-19
+
 ### Added
 
 - Antora documentation site with code examples that are compiled and tested alongside the library.
@@ -19,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   `1.2.0-SNAPSHOT`.
 - Build toolchain upgraded to Gradle 9.9.1, Android Gradle Plugin 9.5.1 and Kotlin 2.4.21.
 - Test-only dependency update (`irurueta-android-test-utils` 1.3.3); no library source changes.
+- Material Components dependency updated to 1.14.0.
 
 ### Removed
 
@@ -115,7 +118,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   `tabIndicatorMarginEnd`, `tabOnScreenLimitEnabled`, `tabMinWidth` and `scrollEnabled`, with RTL layout support.
 - Sample app demonstrating the view.
 
-[Unreleased]: https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/compare/1.1.11...HEAD
+[Unreleased]: https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/compare/1.1.12...HEAD
+[1.1.12]: https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/compare/1.1.11...1.1.12
 [1.1.11]: https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/compare/1.1.10...1.1.11
 [1.1.10]: https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/compare/1.1.9...1.1.10
 [1.1.9]: https://github.com/albertoirurueta/irurueta-android-recycler-tab-layout/compare/1.1.8...1.1.9
