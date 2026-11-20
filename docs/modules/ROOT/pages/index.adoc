@@ -13,6 +13,9 @@ contains complex or memory-intensive views such as image thumbnails. `RecyclerTa
 tab views are created by an adapter and recycled as they scroll off screen, while the view draws a line indicator
 under the selected tab with the same animated behavior as `TabLayout`.
 
+.`RecyclerTabLayout` in action: the indicator follows the selected tab while tab views are recycled
+image::demo.gif[Animated demo of RecyclerTabLayout scrolling through tabs and moving the selection indicator]
+
 == Core concepts
 
 * *Adapter-driven tabs*: tabs are supplied through a regular `RecyclerView.Adapter`, view holder and item view.
