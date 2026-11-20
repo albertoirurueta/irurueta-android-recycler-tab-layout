@@ -28,6 +28,9 @@ recycled, so it scales to a large number of tabs.
 |`RecyclerTabLayoutActivity` (instrumented tests).
 |===
 
+.`RecyclerTabLayout` scrolling through tabs with the animated selection indicator
+image::demo.gif[Animated demo of RecyclerTabLayout scrolling through tabs and moving the selection indicator]
+
 == Accessibility
 
 The repository's `.ui-quality.yml` sets `accessibility: enforce`: automated accessibility checks run with the UI
